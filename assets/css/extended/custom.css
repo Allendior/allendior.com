@@ -1,0 +1,211 @@
+/* ── Color Palette ── */
+:root {
+  --bg: #1a1b2e;
+  --bg-secondary: #22233a;
+  --border: #2e3050;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --cream: #e8dcc8;
+  --text: #d4c9b8;
+  --text-muted: #8a8fa8;
+  --link: #c9a84c;
+  --link-hover: #e8c97a;
+  --code-bg: #12131f;
+}
+
+/* ── Force dark background ── */
+body,
+.dark body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+/* ── Header / Nav ── */
+.header,
+header {
+  background-color: var(--bg) !important;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav,
+#top-link {
+  background-color: var(--bg) !important;
+}
+
+.logo a,
+.logo span {
+  color: var(--cream) !important;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+#menu a {
+  color: var(--text-muted) !important;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+#menu a:hover,
+#menu a.active {
+  color: var(--gold) !important;
+}
+
+/* ── Home hero ── */
+.home-info .entry-header h1,
+.home-info h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--cream) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.home-info .entry-content p {
+  color: var(--text) !important;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+/* ── Social icons ── */
+.social-icons a {
+  color: var(--text-muted) !important;
+  transition: color 0.2s;
+}
+
+.social-icons a:hover {
+  color: var(--gold) !important;
+}
+
+.social-icons svg {
+  fill: currentColor;
+}
+
+/* ── Post list ── */
+.post-entry {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+
+.post-entry:hover {
+  border-color: var(--gold) !important;
+}
+
+.entry-header h2 a {
+  color: var(--cream) !important;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.entry-header h2 a:hover {
+  color: var(--gold-light) !important;
+}
+
+.post-meta,
+.entry-meta {
+  color: var(--text-muted) !important;
+  font-size: 0.8rem;
+}
+
+/* ── Article content ── */
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--cream) !important;
+}
+
+.post-content p,
+.post-content li {
+  color: var(--text) !important;
+  line-height: 1.75;
+}
+
+.post-content a {
+  color: var(--link) !important;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.post-content a:hover {
+  color: var(--link-hover) !important;
+  text-decoration-color: var(--link-hover);
+}
+
+.post-content code {
+  background-color: var(--code-bg) !important;
+  color: var(--gold-light) !important;
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  font-size: 0.88em;
+}
+
+.post-content pre {
+  background-color: var(--code-bg) !important;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* ── Section headings ── */
+.page-header h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--cream) !important;
+  font-size: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+/* ── Footer ── */
+footer {
+  background-color: var(--bg) !important;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted) !important;
+}
+
+footer a {
+  color: var(--text-muted) !important;
+}
+
+footer a:hover {
+  color: var(--gold) !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ── Tags / categories ── */
+.terms-tags a {
+  background-color: var(--bg-secondary) !important;
+  color: var(--gold) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.terms-tags a:hover {
+  border-color: var(--gold) !important;
+  background-color: var(--bg) !important;
+}
+
+/* ── Breadcrumb / post nav ── */
+.post-nav-prev a,
+.post-nav-next a {
+  color: var(--gold) !important;
+}

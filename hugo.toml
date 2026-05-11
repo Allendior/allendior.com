@@ -1,0 +1,81 @@
+baseURL = "https://allendior.com/"
+locale = "en-us"
+title = "Allen Ghanghas"
+theme = "PaperMod"
+paginate = 10
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[params]
+  env = "production"
+  title = "Allen Ghanghas"
+  description = "Building AI agents, writing about tech and life, living in Kelowna BC."
+  author = "Allen Ghanghas"
+  defaultTheme = "dark"
+  disableThemeToggle = true
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = false
+  ShowCodeCopyButtons = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = false
+  tocopen = false
+
+  [params.homeInfoParams]
+    Title = "Allen Ghanghas"
+    Content = "Building AI agents and writing about tech, life, and what it means to grow roots in a new place. Based in Kelowna, BC."
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/Allendior"
+
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://linkedin.com/in/allenghanghas"
+
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[menu]
+  [[menu.main]]
+    identifier = "writing"
+    name = "Writing"
+    url = "/writing/"
+    weight = 10
+  [[menu.main]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects/"
+    weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 30
+  [[menu.main]]
+    identifier = "now"
+    name = "Now"
+    url = "/now/"
+    weight = 40
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

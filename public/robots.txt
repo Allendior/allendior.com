@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://allendior.com/sitemap.xml

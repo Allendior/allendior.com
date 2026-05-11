@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Allen Ghanghas</title>
+    <link>https://allendior.com/</link>
+    <description>Recent content on Allen Ghanghas</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 May 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://allendior.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why I Build AI Agents</title>
+      <link>https://allendior.com/writing/why-i-build-ai-agents/</link>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://allendior.com/writing/why-i-build-ai-agents/</guid>
+      <description>Most AI tools help you think faster. Agents help you act. That distinction matters more than I expected.</description>
+    </item>
+    <item>
+      <title>Choosing a Place</title>
+      <link>https://allendior.com/writing/kelowna-choosing-a-place/</link>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://allendior.com/writing/kelowna-choosing-a-place/</guid>
+      <description>There&amp;#39;s a difference between living somewhere and choosing it. I chose Kelowna.</description>
+    </item>
+    <item>
+      <title>Building in Public Without the Performance</title>
+      <link>https://allendior.com/writing/building-in-public-without-the-performance/</link>
+      <pubDate>Fri, 20 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://allendior.com/writing/building-in-public-without-the-performance/</guid>
+      <description>Building in public has become a content format. I want the practice without the performance.</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>https://allendior.com/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://allendior.com/about/</guid>
+      <description>About Allen Ghanghas</description>
+    </item>
+    <item>
+      <title>Now</title>
+      <link>https://allendior.com/now/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://allendior.com/now/</guid>
+      <description>What Allen is working on right now</description>
+    </item>
+  </channel>
+</rss>
