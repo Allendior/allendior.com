@@ -1,3 +1,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Rozha+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/samarkan" rel="stylesheet">
+<script>
+(function () {
+  var canvas = document.createElement('canvas');
+  canvas.width = 32;
+  canvas.height = 32;
+  var ctx = canvas.getContext('2d');
+  ctx.font = '26px serif';
+  ctx.fillText('🦫', 0, 26);
+  var dataURL = canvas.toDataURL();
+  var style = document.createElement('style');
+  style.textContent = '*, *::before, *::after { cursor: url("' + dataURL + '") 8 8, auto !important; }';
+  document.head.appendChild(style);
+})();
+</script>

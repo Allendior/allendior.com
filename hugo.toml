@@ -35,6 +35,9 @@ buildExpired = false
   showtoc = false
   tocopen = false
 
+  [params.label]
+    text = "Allen"
+
   [params.homeInfoParams]
     Title = "Allen Ghanghas"
     Content = "Building AI agents and writing about tech, life, and what it means to grow roots in a new place. Based in Kelowna, BC."

@@ -84,7 +84,7 @@ header {
   letter-spacing: -0.02em;
   display: flex;
   align-items: baseline;
-  gap: 0.25em;
+  gap: 0.08em;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -114,9 +114,9 @@ header {
   opacity: 1;
 }
 
-/* Ghanghas — Rozha One (Devanagari-inspired Latin serif) */
+/* Ghanghas — Samarkan (medieval/Arabic-inspired) */
 .name-ghanghas {
-  font-family: 'Rozha One', Georgia, serif;
+  font-family: 'Samarkan', Georgia, serif;
   color: var(--cream);
   font-weight: 400;
 }
@@ -124,7 +124,7 @@ header {
 /* Dior — UnifrakturMaguntia (Old English blackletter) */
 .name-dior {
   font-family: 'UnifrakturMaguntia', cursive;
-  color: var(--gold);
+  color: var(--cream);
 }
 
 /* ── Tagline ── */
