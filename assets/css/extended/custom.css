@@ -122,13 +122,7 @@ body {
    HOME HERO
    ════════════════════════════════ */
 
-.main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 140px);
-}
-
+/* centre only the home page; other pages use normal flow */
 .home-hero {
   display: flex;
   flex-direction: column;
@@ -136,6 +130,8 @@ body {
   text-align: center;
   gap: 1.4rem;
   padding: 3rem 1.5rem;
+  min-height: calc(100vh - 140px);
+  justify-content: center;
 }
 
 /* ── Hero name ── */
@@ -360,3 +356,120 @@ footer a:hover      { color: var(--accent) !important; }
 /* ── Post nav ── */
 .post-nav-prev a,
 .post-nav-next a { color: var(--accent) !important; }
+
+/* ════════════════════════════════
+   WRITING PAGE
+   ════════════════════════════════ */
+
+.writing-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+/* ── Header ── */
+.writing-heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 400;
+  color: var(--heading);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.writing-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.writing-rss-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--accent) !important;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+  margin-bottom: 2rem;
+}
+
+.writing-rss-link:hover { border-color: var(--accent); }
+
+/* ── Category pills ── */
+.cat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.cat-pill {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.cat-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cat-pill.active {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+[data-theme="light"] .cat-pill.active { color: #fff; }
+
+/* ── Year groups ── */
+.year-group { margin-bottom: 2rem; }
+
+.year-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Post rows ── */
+.post-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: opacity 0.15s;
+}
+
+.post-row[hidden] { display: none; }
+
+.post-row-title {
+  color: var(--heading) !important;
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: color 0.2s;
+  flex: 1;
+  min-width: 0;
+}
+
+.post-row-title:hover { color: var(--accent) !important; }
+
+.post-row-date {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

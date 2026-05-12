@@ -1,0 +1,59 @@
+{{- define "main" }}
+<div class="writing-page">
+
+  <header class="writing-header">
+    <h1 class="writing-heading" data-i18n="wr_heading">Writing</h1>
+    <p class="writing-subtitle" data-i18n="wr_subtitle">Essays, tutorials, notes, and reflections on tech, life, and Kelowna.</p>
+    <a class="writing-rss-link" href="/index.xml" data-i18n="wr_rss">Never miss a post — subscribe via RSS</a>
+  </header>
+
+  <div class="cat-pills" role="group" aria-label="Filter by category">
+    <button class="cat-pill active" data-cat="all"     data-i18n="cat_all">All</button>
+    <button class="cat-pill"        data-cat="tech"    data-i18n="cat_tech">Tech</button>
+    <button class="cat-pill"        data-cat="life"    data-i18n="cat_life">Life</button>
+    <button class="cat-pill"        data-cat="builds"  data-i18n="cat_builds">Builds</button>
+    <button class="cat-pill"        data-cat="kelowna" data-i18n="cat_kelowna">Kelowna</button>
+  </div>
+
+  <div class="post-list">
+    {{- range (.Pages.ByDate.Reverse).GroupByDate "2006" }}
+    <div class="year-group">
+      <div class="year-label">{{ .Key }}</div>
+      {{- range .Pages }}
+      <article class="post-row" data-cats="{{ delimit .Params.categories "," | lower }}">
+        <a class="post-row-title" href="{{ .Permalink }}">{{ .Title }}</a>
+        <time class="post-row-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2" }}</time>
+      </article>
+      {{- end }}
+    </div>
+    {{- end }}
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var pills = document.querySelectorAll('.cat-pill');
+  var rows  = document.querySelectorAll('.post-row');
+
+  pills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      var cat = pill.dataset.cat;
+
+      pills.forEach(function (p) { p.classList.toggle('active', p === pill); });
+
+      rows.forEach(function (row) {
+        var cats = (row.dataset.cats || '').split(',').map(function (s) { return s.trim(); });
+        row.hidden = !(cat === 'all' || cats.indexOf(cat) !== -1);
+      });
+
+      /* hide year groups that have no visible posts */
+      document.querySelectorAll('.year-group').forEach(function (group) {
+        var visible = Array.from(group.querySelectorAll('.post-row')).some(function (r) { return !r.hidden; });
+        group.hidden = !visible;
+      });
+    });
+  });
+})();
+</script>
+{{- end }}
