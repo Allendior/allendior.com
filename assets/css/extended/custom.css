@@ -141,28 +141,28 @@ body {
 /* ── Hero name ── */
 .hero-name {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(3rem, 10vw, 5.5rem);
   font-weight: 400;
   color: var(--heading);
   margin: 0;
-  line-height: 1.05;
   letter-spacing: -0.02em;
   display: flex;
-  align-items: baseline;
-  gap: 0;           /* no gap — names read as one word */
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
 }
 
 .name-allen {
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  line-height: 1;
   color: var(--heading);
-  /* hairline right padding so the last name doesn't smash the 'n' */
-  padding-right: 0.06em;
 }
 
-/* ── Last-name stacking container (zero-reflow crossfade) ── */
+/* ── Last-name stacking container (zero-reflow crossfade) ──
+   Slightly smaller than "Allen" so the two lines feel balanced. */
 .name-last-wrapper {
   display: inline-grid;
+  font-size: clamp(2.2rem, 7.5vw, 4.2rem);
+  line-height: 1.05;
 }
 
 .name-last {
