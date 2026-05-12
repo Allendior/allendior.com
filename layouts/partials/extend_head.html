@@ -2,17 +2,74 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/samarkan" rel="stylesheet">
+
 <script>
+/* ── Beaver cursor ── */
 (function () {
-  var canvas = document.createElement('canvas');
-  canvas.width = 32;
-  canvas.height = 32;
-  var ctx = canvas.getContext('2d');
-  ctx.font = '26px serif';
-  ctx.fillText('🦫', 0, 26);
-  var dataURL = canvas.toDataURL();
-  var style = document.createElement('style');
-  style.textContent = '*, *::before, *::after { cursor: url("' + dataURL + '") 8 8, auto !important; }';
-  document.head.appendChild(style);
+  var c = document.createElement('canvas');
+  c.width = 32; c.height = 32;
+  var x = c.getContext('2d');
+  x.font = '26px serif';
+  x.fillText('🦫', 0, 26);
+  var url = c.toDataURL();
+  var s = document.createElement('style');
+  s.textContent = '*,*::before,*::after{cursor:url("' + url + '") 8 8,auto!important}';
+  document.head.appendChild(s);
 })();
+
+/* ── i18n ── */
+var AG_i18n = {
+  en: {
+    tagline:  'Building AI agents. Writing about tech, life, and Kelowna.',
+    writing:  'Writing',
+    projects: 'Projects',
+    about:    'About',
+    now:      'Now',
+    rss:      'Subscribe via RSS'
+  },
+  fr: {
+    tagline:  'Créer des agents IA. Écrire sur la tech, la vie et Kelowna.',
+    writing:  'Écriture',
+    projects: 'Projets',
+    about:    'À propos',
+    now:      'Maintenant',
+    rss:      "S'abonner via RSS"
+  },
+  hi: {
+    tagline:  'एआई एजेंट बना रहा हूँ। तकनीक, जीवन और केलोना के बारे में लिख रहा हूँ।',
+    writing:  'लेखन',
+    projects: 'परियोजनाएं',
+    about:    'मेरे बारे में',
+    now:      'अभी',
+    rss:      'RSS से जुड़ें'
+  }
+};
+
+function AG_applyLang(lang) {
+  var t = AG_i18n[lang] || AG_i18n.en;
+
+  /* elements with data-i18n on home hero and header menu spans */
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  /* highlight active flag button */
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.classList.toggle('lang-active', btn.dataset.lang === lang);
+  });
+
+  localStorage.setItem('ag_lang', lang);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var saved = localStorage.getItem('ag_lang') || 'en';
+  AG_applyLang(saved);
+
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      AG_applyLang(btn.dataset.lang);
+    });
+  });
+});
 </script>

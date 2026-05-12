@@ -1,45 +1,89 @@
-/* ── Color Palette ── */
+/* ════════════════════════════════
+   THEME VARIABLES
+   ════════════════════════════════ */
+
+/* Dark (default) */
 :root {
-  --bg: #1a1b2e;
+  --bg:           #1a1b2e;
   --bg-secondary: #22233a;
-  --border: #2e3050;
-  --gold: #c9a84c;
-  --gold-light: #e8c97a;
-  --cream: #e8dcc8;
-  --text: #d4c9b8;
-  --text-muted: #8a8fa8;
-  --link: #c9a84c;
-  --link-hover: #e8c97a;
-  --code-bg: #12131f;
+  --border:       #2e3050;
+  --accent:       #c9a84c;
+  --accent-light: #e8c97a;
+  --heading:      #e8dcc8;
+  --text:         #d4c9b8;
+  --text-muted:   #8a8fa8;
+  --code-bg:      #12131f;
 }
 
-/* ── Force dark background ── */
-body,
-.dark body {
+/* Light — warm cream/brown à la harsh17.in */
+[data-theme="light"] {
+  --bg:           #f5f4f1;
+  --bg-secondary: #eceae5;
+  --border:       #d0cbc2;
+  --accent:       #7a3628;
+  --accent-light: #9a4535;
+  --heading:      #1e1b18;
+  --text:         #3a3530;
+  --text-muted:   #7a7268;
+  --code-bg:      #e8e4de;
+}
+
+/* ════════════════════════════════
+   BASE
+   ════════════════════════════════ */
+
+body {
   background-color: var(--bg) !important;
   color: var(--text) !important;
+  transition: background-color 0.25s, color 0.25s;
 }
 
-/* ── Header / Nav ── */
-.header,
-header {
+/* ── Header ── */
+.header, header {
   background-color: var(--bg) !important;
-  border-bottom: none;
+  border-bottom: none !important;
 }
 
-.nav,
-#top-link {
+.nav, #top-link {
   background-color: var(--bg) !important;
 }
 
-.logo a,
-.logo span {
-  color: var(--cream) !important;
+/* ── Logo / Allen label ── */
+.logo a {
+  color: var(--heading) !important;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 1.1rem;
   letter-spacing: 0.02em;
+  text-decoration: none !important;
 }
 
+.logo-switches {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Theme toggle button ── */
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.theme-toggle:hover { color: var(--accent); }
+
+/* PaperMod shows moon in dark, sun in light — mirror that */
+[data-theme="dark"]  .theme-toggle .sun  { display: none; }
+[data-theme="dark"]  .theme-toggle .moon { display: block; }
+[data-theme="light"] .theme-toggle .moon { display: none; }
+[data-theme="light"] .theme-toggle .sun  { display: block; }
+
+/* ── Header menu ── */
 #menu a {
   color: var(--text-muted) !important;
   font-size: 0.8rem;
@@ -49,9 +93,30 @@ header {
 }
 
 #menu a:hover,
-#menu a.active {
-  color: var(--gold) !important;
+#menu .active { color: var(--accent) !important; }
+
+/* ── Language switcher ── */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto; /* push to far right */
 }
+
+.lang-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.lang-btn:hover           { opacity: 0.85; }
+.lang-btn.lang-active     { opacity: 1; border-color: var(--border); }
 
 /* ════════════════════════════════
    HOME HERO
@@ -78,53 +143,48 @@ header {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(3rem, 10vw, 5.5rem);
   font-weight: 400;
-  color: var(--cream);
+  color: var(--heading);
   margin: 0;
   line-height: 1.05;
   letter-spacing: -0.02em;
   display: flex;
   align-items: baseline;
-  gap: 0.08em;
+  gap: 0;           /* no gap — names read as one word */
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .name-allen {
-  color: var(--cream);
+  color: var(--heading);
+  /* hairline right padding so the last name doesn't smash the 'n' */
+  padding-right: 0.06em;
 }
 
-/* ── Last-name animation container ──
-   Both names are stacked; the invisible one uses visibility:hidden
-   so it still contributes to layout width, preventing reflow.
-   The visible one is layered on top via position:absolute.
-   We keep the wider of the two names in flow at all times.        */
+/* ── Last-name stacking container (zero-reflow crossfade) ── */
 .name-last-wrapper {
-  position: relative;
-  display: inline-grid; /* both children overlap same cell */
+  display: inline-grid;
 }
 
 .name-last {
-  grid-area: 1 / 1;     /* same grid cell → overlap, no reflow */
+  grid-area: 1 / 1;
   opacity: 0;
   transition: opacity 0.7s ease;
   white-space: nowrap;
 }
 
-.name-last.name-visible {
-  opacity: 1;
-}
+.name-last.name-visible { opacity: 1; }
 
 /* Ghanghas — Samarkan (medieval/Arabic-inspired) */
 .name-ghanghas {
   font-family: 'Samarkan', Georgia, serif;
-  color: var(--cream);
+  color: var(--heading);
   font-weight: 400;
 }
 
 /* Dior — UnifrakturMaguntia (Old English blackletter) */
 .name-dior {
   font-family: 'UnifrakturMaguntia', cursive;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 /* ── Tagline ── */
@@ -132,12 +192,12 @@ header {
   font-size: 1rem;
   color: var(--text-muted);
   margin: 0;
-  max-width: 380px;
+  max-width: 400px;
   line-height: 1.6;
   letter-spacing: 0.01em;
 }
 
-/* ── Nav links ── */
+/* ── Hero nav ── */
 .hero-nav {
   display: flex;
   align-items: center;
@@ -153,14 +213,8 @@ header {
   transition: color 0.2s;
 }
 
-.hero-nav a:hover {
-  color: var(--gold) !important;
-}
-
-.hero-nav .dot {
-  color: var(--border);
-  user-select: none;
-}
+.hero-nav a:hover    { color: var(--accent) !important; }
+.hero-nav .dot       { color: var(--border); user-select: none; }
 
 /* ── Social icons ── */
 .hero-social {
@@ -176,9 +230,7 @@ header {
   transition: color 0.2s;
 }
 
-.hero-social a:hover {
-  color: var(--gold) !important;
-}
+.hero-social a:hover { color: var(--accent) !important; }
 
 /* ── RSS link ── */
 .hero-rss {
@@ -191,12 +243,12 @@ header {
 }
 
 .hero-rss:hover {
-  color: var(--gold) !important;
-  border-color: var(--gold);
+  color: var(--accent) !important;
+  border-color: var(--accent);
 }
 
 /* ════════════════════════════════
-   POST LIST (Writing / Projects pages)
+   POST LIST
    ════════════════════════════════ */
 
 .post-entry {
@@ -206,21 +258,16 @@ header {
   transition: border-color 0.2s;
 }
 
-.post-entry:hover {
-  border-color: var(--gold) !important;
-}
+.post-entry:hover { border-color: var(--accent) !important; }
 
 .entry-header h2 a {
-  color: var(--cream) !important;
+  color: var(--heading) !important;
   font-family: Georgia, 'Times New Roman', serif;
 }
 
-.entry-header h2 a:hover {
-  color: var(--gold-light) !important;
-}
+.entry-header h2 a:hover { color: var(--accent-light) !important; }
 
-.post-meta,
-.entry-meta {
+.post-meta, .entry-meta {
   color: var(--text-muted) !important;
   font-size: 0.8rem;
 }
@@ -234,7 +281,7 @@ header {
 .post-content h3,
 .post-content h4 {
   font-family: Georgia, 'Times New Roman', serif;
-  color: var(--cream) !important;
+  color: var(--heading) !important;
 }
 
 .post-content p,
@@ -244,20 +291,20 @@ header {
 }
 
 .post-content a {
-  color: var(--link) !important;
+  color: var(--accent) !important;
   text-decoration: underline;
   text-decoration-color: transparent;
   transition: text-decoration-color 0.2s;
 }
 
 .post-content a:hover {
-  color: var(--link-hover) !important;
-  text-decoration-color: var(--link-hover);
+  color: var(--accent-light) !important;
+  text-decoration-color: var(--accent-light);
 }
 
 .post-content code {
   background-color: var(--code-bg) !important;
-  color: var(--gold-light) !important;
+  color: var(--accent-light) !important;
   border-radius: 3px;
   padding: 0.1em 0.35em;
   font-size: 0.88em;
@@ -272,48 +319,44 @@ header {
 /* ── Section headings ── */
 .page-header h1 {
   font-family: Georgia, 'Times New Roman', serif;
-  color: var(--cream) !important;
+  color: var(--heading) !important;
   font-size: 2rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
-/* ── Footer ── */
+/* ════════════════════════════════
+   FOOTER
+   ════════════════════════════════ */
+
 footer {
   background-color: var(--bg) !important;
   border-top: 1px solid var(--border);
   color: var(--text-muted) !important;
 }
 
-footer a {
-  color: var(--text-muted) !important;
-}
-
-footer a:hover {
-  color: var(--gold) !important;
-}
+footer a            { color: var(--text-muted) !important; }
+footer a:hover      { color: var(--accent) !important; }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 /* ── Tags / categories ── */
 .terms-tags a {
   background-color: var(--bg-secondary) !important;
-  color: var(--gold) !important;
+  color: var(--accent) !important;
   border: 1px solid var(--border) !important;
   border-radius: 4px;
   font-size: 0.8rem;
 }
 
 .terms-tags a:hover {
-  border-color: var(--gold) !important;
+  border-color: var(--accent) !important;
   background-color: var(--bg) !important;
 }
 
 /* ── Post nav ── */
 .post-nav-prev a,
-.post-nav-next a {
-  color: var(--gold) !important;
-}
+.post-nav-next a { color: var(--accent) !important; }
