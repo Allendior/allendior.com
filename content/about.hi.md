@@ -1,7 +1,7 @@
 ---
 title: "मेरे बारे में"
 layout: "about"
-cover_image: "/images/cover.jpg"
+cover_image: "/images/about-cover-2026-05-12.jpg"
 profile_image: "/images/avatar.jpg"
 ---
 
