@@ -1,6 +1,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/samarkan" rel="stylesheet">
 
 <script>
@@ -79,6 +79,9 @@ function AG_applyLang(lang) {
     var key = el.getAttribute('data-i18n');
     if (t[key] !== undefined) el.textContent = t[key];
   });
+
+  /* toggle Devanagari font class on <html> so CSS can apply it */
+  document.documentElement.classList.toggle('lang-hi', lang === 'hi');
 
   /* highlight active flag button */
   document.querySelectorAll('.lang-btn').forEach(function (btn) {

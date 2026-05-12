@@ -473,3 +473,20 @@ footer a:hover      { color: var(--accent) !important; }
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ════════════════════════════════
+   HINDI / DEVANAGARI SUPPORT
+   Applied via html.lang-hi when the user selects 🇮🇳
+   ════════════════════════════════ */
+
+html.lang-hi [data-i18n],
+html.lang-hi .hero-tagline,
+html.lang-hi .writing-subtitle,
+html.lang-hi .writing-rss-link,
+html.lang-hi .cat-pill,
+html.lang-hi .hero-nav a,
+html.lang-hi .hero-rss {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 1.05em; /* Devanagari reads slightly better a touch larger */
+  line-height: 1.7;
+}
