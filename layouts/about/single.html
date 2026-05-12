@@ -1,30 +1,33 @@
 {{- define "main" }}
-<section class="about-layout">
-  <aside class="about-hero-card">
-    <div class="about-cover"{{- if .Params.cover_image }} style="background-image: url('{{ .Params.cover_image | relURL }}')"{{- end }} role="img" aria-label="Cover photo"></div>
-    <div class="about-profile-wrap">
-      {{- if .Params.profile_image }}
-      <img class="about-avatar" src="{{ .Params.profile_image | relURL }}" alt="Allen Ghanghas">
-      {{- else }}
-      <div class="about-avatar about-avatar-placeholder" aria-hidden="true">AG</div>
-      {{- end }}
-    </div>
-    <div class="about-intro">
-      <p class="about-kicker">About</p>
-      <h1 class="about-title">{{ site.Title }}</h1>
-      {{- with .Params.summary }}
-      <p class="about-summary">{{ . }}</p>
-      {{- end }}
-      <div class="about-badges" aria-label="Quick facts">
-        <span>Kelowna, BC</span>
-        <span>AI agents</span>
-        <span>E-bike</span>
-      </div>
-    </div>
-  </aside>
+<div class="about-page">
 
-  <article class="about-card post-content md-content">
+  {{/* ── Cover photo ── */}}
+  <div class="about-cover"
+    {{- if .Params.cover_image }}
+    style="background-image: url('{{ .Params.cover_image | relURL }}')"
+    {{- end }}
+    role="img"
+    aria-label="Cover photo">
+  </div>
+
+  {{/* ── Profile photo — overlaps bottom of cover ── */}}
+  <div class="about-profile-wrap">
+    {{- if .Params.profile_image }}
+    <img class="about-avatar"
+         src="{{ .Params.profile_image | relURL }}"
+         alt="Allen Ghanghas">
+    {{- else }}
+    <div class="about-avatar about-avatar-placeholder" aria-hidden="true">AG</div>
+    {{- end }}
+  </div>
+
+  {{/* ── Name ── */}}
+  <p class="about-name">Allen</p>
+
+  {{/* ── Bio ── */}}
+  <div class="about-content post-content md-content">
     {{- .Content }}
-  </article>
-</section>
+  </div>
+
+</div>
 {{- end }}
