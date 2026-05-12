@@ -2,8 +2,8 @@
 title: "About"
 type: "about"
 url: "/about/"
-cover_image: ""
-profile_image: ""
+cover_image: "/images/cover.jpg"
+profile_image: "/images/avatar.jpg"
 ---
 
 I'm Allen Ghanghas — a CIS grad building AI agents, writing when I can, and slowly putting down roots in Kelowna, BC.
