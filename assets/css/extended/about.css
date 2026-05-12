@@ -1,0 +1,146 @@
+/* ════════════════════════════════
+   ABOUT PAGE
+   ════════════════════════════════ */
+
+/* Reset .main padding so cover can go edge-to-edge within the content column */
+body:has(.about-page) .main {
+  padding: 0;
+}
+
+/* ── Cover photo ── */
+.about-cover {
+  width: 100%;
+  height: 300px;
+  background-color: var(--bg);          /* navy in dark, cream in light */
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  position: relative;
+  /* subtle inner glow at the bottom so the avatar blends in */
+  box-shadow: inset 0 -60px 60px -20px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .about-cover {
+  background-color: #dedad4;
+  box-shadow: inset 0 -60px 60px -20px rgba(0, 0, 0, 0.12);
+}
+
+/* Decorative bottom gradient line */
+.about-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent, #c9a84c), transparent);
+}
+
+/* ── Profile photo wrapper ── */
+.about-profile-wrap {
+  display: flex;
+  justify-content: center;
+  /* Pull avatar up so half sits over the cover */
+  margin-top: -90px;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 0;
+}
+
+/* ── Avatar shared styles ── */
+.about-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="light"] .about-avatar {
+  border-color: #f5f4f1;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Placeholder avatar (no image set) ── */
+.about-avatar-placeholder {
+  background: linear-gradient(135deg, #22233a 0%, #2e3050 100%);
+  color: #c9a84c;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+[data-theme="light"] .about-avatar-placeholder {
+  background: linear-gradient(135deg, #dedad4 0%, #cdc8c0 100%);
+  color: #7a3628;
+}
+
+/* ── Name ── */
+.about-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 400;
+  color: var(--heading, #e8dcc8);
+  text-align: center;
+  margin: 1rem 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+/* ── Bio content ── */
+.about-content {
+  max-width: 680px;
+  margin: 1.5rem auto 4rem;
+  padding: 0 1.5rem;
+  text-align: left;
+}
+
+.about-content h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--heading, #e8dcc8);
+  margin: 2rem 0 0.6rem;
+  letter-spacing: 0.01em;
+}
+
+.about-content p {
+  color: var(--text, #d4c9b8);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.about-content ul {
+  color: var(--text, #d4c9b8);
+  line-height: 1.75;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.about-content li {
+  margin-bottom: 0.3rem;
+}
+
+.about-content a {
+  color: var(--accent, #c9a84c);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.about-content a:hover {
+  text-decoration-color: var(--accent, #c9a84c);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .about-cover     { height: 200px; }
+  .about-avatar    { width: 130px; height: 130px; }
+  .about-profile-wrap { margin-top: -65px; }
+}
