@@ -4,7 +4,7 @@
   {{/* ── Cover photo ── */}}
   <div class="about-cover"
     {{- if .Params.cover_image }}
-    style="background-image: url('{{ .Params.cover_image | absURL }}')"
+    style="background-image: url('{{ .Params.cover_image | relURL }}')"
     {{- end }}
     role="img"
     aria-label="Cover photo">
@@ -14,7 +14,7 @@
   <div class="about-profile-wrap">
     {{- if .Params.profile_image }}
     <img class="about-avatar"
-         src="{{ .Params.profile_image | absURL }}"
+         src="{{ .Params.profile_image | relURL }}"
          alt="Allen Ghanghas">
     {{- else }}
     <div class="about-avatar about-avatar-placeholder" aria-hidden="true">AG</div>
