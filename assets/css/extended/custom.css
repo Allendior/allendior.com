@@ -24,7 +24,7 @@ body,
 .header,
 header {
   background-color: var(--bg) !important;
-  border-bottom: 1px solid var(--border);
+  border-bottom: none;
 }
 
 .nav,
@@ -36,13 +36,13 @@ header {
 .logo span {
   color: var(--cream) !important;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   letter-spacing: 0.02em;
 }
 
 #menu a {
   color: var(--text-muted) !important;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 0.2s;
@@ -53,38 +53,152 @@ header {
   color: var(--gold) !important;
 }
 
-/* ── Home hero ── */
-.home-info .entry-header h1,
-.home-info h1 {
+/* ════════════════════════════════
+   HOME HERO
+   ════════════════════════════════ */
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 140px);
+}
+
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.4rem;
+  padding: 3rem 1.5rem;
+}
+
+/* ── Hero name ── */
+.hero-name {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--cream) !important;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 400;
+  color: var(--cream);
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25em;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.home-info .entry-content p {
+.name-allen {
+  color: var(--cream);
+}
+
+/* ── Last-name animation container ──
+   Both names are stacked; the invisible one uses visibility:hidden
+   so it still contributes to layout width, preventing reflow.
+   The visible one is layered on top via position:absolute.
+   We keep the wider of the two names in flow at all times.        */
+.name-last-wrapper {
+  position: relative;
+  display: inline-grid; /* both children overlap same cell */
+}
+
+.name-last {
+  grid-area: 1 / 1;     /* same grid cell → overlap, no reflow */
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  white-space: nowrap;
+}
+
+.name-last.name-visible {
+  opacity: 1;
+}
+
+/* Ghanghas — Rozha One (Devanagari-inspired Latin serif) */
+.name-ghanghas {
+  font-family: 'Rozha One', Georgia, serif;
+  color: var(--cream);
+  font-weight: 400;
+}
+
+/* Dior — UnifrakturMaguntia (Old English blackletter) */
+.name-dior {
+  font-family: 'UnifrakturMaguntia', cursive;
+  color: var(--gold);
+}
+
+/* ── Tagline ── */
+.hero-tagline {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 380px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+/* ── Nav links ── */
+.hero-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-nav a {
   color: var(--text) !important;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  max-width: 520px;
-}
-
-/* ── Social icons ── */
-.social-icons a {
-  color: var(--text-muted) !important;
+  text-decoration: none;
+  font-size: 0.95rem;
   transition: color 0.2s;
 }
 
-.social-icons a:hover {
+.hero-nav a:hover {
   color: var(--gold) !important;
 }
 
-.social-icons svg {
-  fill: currentColor;
+.hero-nav .dot {
+  color: var(--border);
+  user-select: none;
 }
 
-/* ── Post list ── */
+/* ── Social icons ── */
+.hero-social {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.hero-social a {
+  color: var(--text-muted) !important;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.hero-social a:hover {
+  color: var(--gold) !important;
+}
+
+/* ── RSS link ── */
+.hero-rss {
+  font-size: 0.8rem;
+  color: var(--text-muted) !important;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.hero-rss:hover {
+  color: var(--gold) !important;
+  border-color: var(--gold);
+}
+
+/* ════════════════════════════════
+   POST LIST (Writing / Projects pages)
+   ════════════════════════════════ */
+
 .post-entry {
   background-color: var(--bg-secondary) !important;
   border: 1px solid var(--border) !important;
@@ -111,7 +225,10 @@ header {
   font-size: 0.8rem;
 }
 
-/* ── Article content ── */
+/* ════════════════════════════════
+   ARTICLE CONTENT
+   ════════════════════════════════ */
+
 .post-content h1,
 .post-content h2,
 .post-content h3,
@@ -177,18 +294,9 @@ footer a:hover {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 /* ── Tags / categories ── */
 .terms-tags a {
@@ -204,7 +312,7 @@ footer a:hover {
   background-color: var(--bg) !important;
 }
 
-/* ── Breadcrumb / post nav ── */
+/* ── Post nav ── */
 .post-nav-prev a,
 .post-nav-next a {
   color: var(--gold) !important;
