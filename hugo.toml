@@ -2,6 +2,19 @@ baseURL = "https://allendior.com/"
 locale = "en-us"
 title = "Allen Ghanghas"
 theme = "PaperMod"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+[languages]
+  [languages.en]
+    languageName = "English"
+    weight = 1
+  [languages.fr]
+    languageName = "Français"
+    weight = 2
+  [languages.hi]
+    languageName = "हिन्दी"
+    weight = 3
 paginate = 10
 enableRobotsTXT = true
 buildDrafts = false

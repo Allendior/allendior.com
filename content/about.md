@@ -1,7 +1,6 @@
 ---
 title: "About"
 layout: "about"
-url: "/about/"
 cover_image: "/images/cover.jpg"
 profile_image: "/images/avatar.jpg"
 ---
