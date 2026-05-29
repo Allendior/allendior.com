@@ -64,7 +64,27 @@ def get_token(client_id: str, client_secret: str, refresh_token: str) -> str:
             "Content-Type":  "application/x-www-form-urlencoded",
         },
     )
+    # Log the scopes the token was actually granted — useful for 403 debugging
+    granted_scope = resp.get("scope", "(none returned)")
+    print(f"  Token scopes: {granted_scope}")
     return resp["access_token"]
+
+
+def check_playlist(playlist_id: str, token: str) -> None:
+    """Fetch playlist metadata and log name/owner/public so 403s are diagnosable."""
+    try:
+        meta = _http(
+            f"https://api.spotify.com/v1/playlists/{playlist_id}"
+            f"?fields=id,name,public,owner(display_name)",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        name   = meta.get("name", "?")
+        owner  = meta.get("owner", {}).get("display_name", "?")
+        public = meta.get("public")
+        print(f"  Playlist: \"{name}\" by {owner} | public={public}")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode(errors="replace")
+        print(f"  ⚠ Could not fetch playlist metadata: HTTP {exc.code} — {body[:200]}")
 
 
 # ── Playlist ID sanitizer ─────────────────────────────────────────────────────
@@ -191,6 +211,9 @@ def main() -> None:
         token = get_token(client_id, client_secret, refresh_token)
         print("  ✓ Access token obtained")
 
+        print("→ Checking playlist metadata …")
+        check_playlist(playlist_id, token)
+
         print("→ Fetching tracks …")
         tracks = fetch_tracks(playlist_id, token)
         print(f"  {len(tracks)} tracks fetched")
@@ -208,12 +231,18 @@ def main() -> None:
 
     except urllib.error.HTTPError as exc:
         body = exc.read().decode(errors="replace")
-        print(f"✗ Spotify HTTP {exc.code}: {body[:400]}")
+        print(f"✗ Spotify HTTP {exc.code}: {body}")
         if exc.code == 401:
             print("  ↳ 401 Unauthorized — refresh token may be expired or revoked.")
             print("    Re-run scripts/spotify_auth.py and update SPOTIFY_REFRESH_TOKEN.")
         elif exc.code == 403:
-            print("  ↳ 403 Forbidden — check playlist ID and app permissions.")
+            print("  ↳ 403 Forbidden.")
+            print("    Possible causes:")
+            print("    1. The Spotify account used in spotify_auth.py is not the")
+            print("       playlist owner AND the playlist is private.")
+            print("    2. The token was granted without the required scopes.")
+            print("       Check 'Token scopes:' line above — needs playlist-read-private.")
+            print("    3. The playlist ID is wrong. Check SPOTIFY_PLAYLIST_ID secret.")
         print("  Keeping existing data/music.yaml")
 
     except Exception as exc:
