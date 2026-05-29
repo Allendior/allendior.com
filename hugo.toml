@@ -97,11 +97,6 @@ buildExpired = false
     name = "Gallery"
     url = "/gallery/"
     weight = 50
-  [[menu.main]]
-    identifier = "music"
-    name = "Music"
-    url = "/music/"
-    weight = 60
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

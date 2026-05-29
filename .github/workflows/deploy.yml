@@ -38,14 +38,6 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Sync Spotify playlist
-        run: python3 scripts/spotify_sync.py
-        env:
-          SPOTIFY_CLIENT_ID:     ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          SPOTIFY_PLAYLIST_ID:   ${{ secrets.SPOTIFY_PLAYLIST_ID }}
-          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-
       - name: Fetch GitHub repositories
         run: python3 scripts/fetch_repos.py
 
