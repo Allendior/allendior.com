@@ -7,13 +7,13 @@ defaultContentLanguageInSubdir = false
 
 [languages]
   [languages.en]
-    languageName = "English"
+    label = "English"
     weight = 1
   [languages.fr]
-    languageName = "Français"
+    label = "Français"
     weight = 2
   [languages.hi]
-    languageName = "हिन्दी"
+    label = "हिन्दी"
     weight = 3
 paginate = 10
 enableRobotsTXT = true

@@ -40,7 +40,7 @@
   --accent-dim:     rgba(122, 54, 40, 0.08);
   --heading:        #1e1b18;
   --text:           #3a3530;
-  --text-muted:     #7a7268;
+  --text-muted:     #6e6860;
   --code-bg:        #e8e4de;
   --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md:      0 8px 24px rgba(0, 0, 0, 0.12);
@@ -91,12 +91,12 @@ body {
   gap: 0;
 }
 
-/* ── Logo ── */
+/* ── Logo / wordmark ── */
 .site-logo {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   font-weight: 400;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
   color: var(--heading) !important;
   text-decoration: none !important;
   flex-shrink: 0;
@@ -508,6 +508,52 @@ body {
   font-size: 2rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
+}
+
+/* ════════════════════════════════
+   SINGLE / NOW PAGE
+   (PaperMod's single.html layout)
+   ════════════════════════════════ */
+
+.post-single {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.post-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 400;
+  color: var(--heading) !important;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-header {
+  margin-bottom: 2rem;
+}
+
+.post-single .post-meta {
+  color: var(--text-muted) !important;
+  font-size: 0.82rem;
+  margin-top: 0.5rem;
+}
+
+.post-single .post-meta a {
+  color: var(--text-muted) !important;
+  transition: color var(--transition);
+}
+
+.post-single .post-meta a:hover {
+  color: var(--accent) !important;
+}
+
+@media (max-width: 600px) {
+  .post-single { padding: 2rem 1.25rem 4rem; }
 }
 
 /* ════════════════════════════════
