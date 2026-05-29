@@ -112,7 +112,7 @@ def _sanitize_playlist_id(raw: str) -> str:
 def fetch_tracks(playlist_id: str, token: str) -> list:
     """Fetch all tracks from a playlist, following pagination."""
     tracks   = []
-    url      = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
+    url      = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100&market=CA"
     auth     = {"Authorization": f"Bearer {token}"}
     page_num = 0
 
