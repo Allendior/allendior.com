@@ -13,13 +13,13 @@
   </p>
 
   <nav class="hero-nav" aria-label="Main">
-    <a href="/writing/"  data-i18n="writing">Writing</a>
+    <a href="{{ "/writing/"  | absLangURL }}" data-i18n="writing">Writing</a>
     <span class="dot">·</span>
-    <a href="/projects/" data-i18n="projects">Projects</a>
+    <a href="{{ "/projects/" | absLangURL }}" data-i18n="projects">Projects</a>
     <span class="dot">·</span>
-    <a href="/about/"    data-i18n="about">About</a>
+    <a href="{{ "/about/"    | absLangURL }}" data-i18n="about">About</a>
     <span class="dot">·</span>
-    <a href="/now/"      data-i18n="now">Now</a>
+    <a href="{{ "/now/"      | absLangURL }}" data-i18n="now">Now</a>
   </nav>
 
   <div class="hero-social">
@@ -39,7 +39,7 @@
     {{- end }}
   </div>
 
-  <a class="hero-rss" href="/index.xml" data-i18n="rss">Subscribe via RSS</a>
+  <a class="hero-rss" href="{{ "/index.xml" | absLangURL }}" data-i18n="rss">Subscribe via RSS</a>
 </div>
 
 <script>

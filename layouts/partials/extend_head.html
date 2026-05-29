@@ -89,6 +89,9 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  AG_applyLang(localStorage.getItem('ag_lang') || 'en');
+  /* Fall back to the page's own lang attribute so /fr/ shows French
+     and /hi/ shows Hindi even on a first visit with no saved preference */
+  var pageLang = (document.documentElement.lang || 'en').split('-')[0];
+  AG_applyLang(localStorage.getItem('ag_lang') || pageLang);
 });
 </script>
