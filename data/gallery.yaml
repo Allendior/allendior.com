@@ -1,0 +1,8 @@
+# Optional captions for gallery photos.
+# Match the exact filename (case-sensitive) to its caption.
+#
+# Example:
+#   - file: "kelowna-sunset.jpg"
+#     caption: "Sunset over Okanagan Lake, October 2024"
+#
+captions: []

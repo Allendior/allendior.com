@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 06:00 UTC — keeps GitHub repos fresh
   workflow_dispatch:
 
 permissions:
@@ -34,6 +36,34 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Fetch GitHub repositories
+        run: |
+          mkdir -p data
+          curl -sSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/users/Allendior/repos?sort=updated&per_page=20&type=owner" \
+          | python3 -c "
+import json, sys
+
+repos = json.load(sys.stdin)
+keep = [
+    {
+        'name':             r['name'],
+        'description':      r.get('description') or '',
+        'language':         r.get('language') or '',
+        'stargazers_count': r['stargazers_count'],
+        'pushed_at':        r['pushed_at'],
+        'html_url':         r['html_url'],
+    }
+    for r in repos
+    if not r['fork'] and r['name'].lower() != 'allendior'
+]
+print(json.dumps(keep, indent=2))
+" > data/github_repos.json \
+          || echo '[]' > data/github_repos.json
+          echo "Fetched $(python3 -c 'import json; d=json.load(open(\"data/github_repos.json\")); print(len(d))') repos"
 
       - name: Setup Pages
         id: pages

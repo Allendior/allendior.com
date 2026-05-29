@@ -1,0 +1,80 @@
+# Music I keep coming back to — grouped by mood.
+# Moods shown on page: lofi, chill, indie, hip-hop, phonk, j-pop, punjabi, bollywood
+#
+# Fields:
+#   title    (required)
+#   artist   (required)
+#   moods    (required, list — a track can belong to multiple moods)
+#   spotify  (optional)
+#   youtube  (optional)
+
+tracks:
+  - title: "Snowfall"
+    artist: "Øneheart x reidenshi"
+    moods: ["lofi", "chill"]
+    youtube: "https://www.youtube.com/watch?v=mPnpvDRnLDk"
+
+  - title: "Death Bed (Coffee for Your Head)"
+    artist: "Powfu ft. beabadoobee"
+    moods: ["lofi", "indie"]
+
+  - title: "Chill Lofi Study Beats"
+    artist: "Lofi Girl"
+    moods: ["lofi"]
+    youtube: "https://www.youtube.com/watch?v=jfKfPfyJRdk"
+
+  - title: "Glimpse of Us"
+    artist: "Joji"
+    moods: ["indie", "chill"]
+
+  - title: "Lovely"
+    artist: "Billie Eilish & Khalid"
+    moods: ["indie", "chill"]
+
+  - title: "Levitating"
+    artist: "Dua Lipa"
+    moods: ["indie", "chill"]
+
+  - title: "MONTERO (Call Me By Your Name)"
+    artist: "Lil Nas X"
+    moods: ["hip-hop"]
+
+  - title: "Sicko Mode"
+    artist: "Travis Scott"
+    moods: ["hip-hop"]
+
+  - title: "Night Drive (Phonk Mix)"
+    artist: "Kordhell"
+    moods: ["phonk"]
+
+  - title: "Murder In My Mind"
+    artist: "Kordhell"
+    moods: ["phonk"]
+
+  - title: "Suzume"
+    artist: "RADWIMPS ft. Toaka"
+    moods: ["j-pop"]
+
+  - title: "Idol"
+    artist: "YOASOBI"
+    moods: ["j-pop"]
+
+  - title: "Excuses"
+    artist: "AP Dhillon, Gurinder Gill"
+    moods: ["punjabi", "chill"]
+
+  - title: "Brown Munde"
+    artist: "AP Dhillon, Gurinder Gill, Shinda Kahlon"
+    moods: ["punjabi"]
+
+  - title: "Kesariya"
+    artist: "Arijit Singh"
+    moods: ["bollywood", "chill"]
+
+  - title: "Tum Hi Ho"
+    artist: "Arijit Singh"
+    moods: ["bollywood"]
+
+  - title: "Calm Down"
+    artist: "Rema & Selena Gomez"
+    moods: ["chill"]

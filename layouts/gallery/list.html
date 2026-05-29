@@ -1,0 +1,134 @@
+{{- define "main" }}
+<div class="gallery-page">
+
+  <header class="gallery-header">
+    <h1 class="gallery-heading">{{ .Title }}</h1>
+    <p class="gallery-subtitle">{{ with .Description }}{{ . }}{{ else }}Photos from places, moments, and things worth remembering.{{ end }}</p>
+  </header>
+
+  {{- /* Build caption lookup dict from optional data/gallery.yaml */ -}}
+  {{- $captions := dict }}
+  {{- with hugo.Data.gallery }}
+    {{- range .captions }}
+      {{- $captions = merge $captions (dict .file .caption) }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* Collect image files from static/gallery/ */ -}}
+  {{- $imgExts := slice ".jpg" ".jpeg" ".png" ".webp" ".gif" }}
+  {{- $photos := slice }}
+  {{- range readDir "static/gallery" }}
+    {{- if not .IsDir }}
+      {{- if in $imgExts (path.Ext .Name | lower) }}
+        {{- $photos = $photos | append .Name }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $photos }}
+  <div class="gallery-grid" id="gallery-grid">
+    {{- range $i, $name := $photos }}
+    {{- $cap := index $captions $name | default "" }}
+    <figure class="gallery-item"
+            data-src="/gallery/{{ $name }}"
+            data-caption="{{ $cap }}"
+            tabindex="0"
+            role="button"
+            aria-label="Open photo{{ with $cap }}: {{ . }}{{ end }}">
+      <img src="/gallery/{{ $name }}"
+           alt="{{ with $cap }}{{ . }}{{ else }}Gallery photo {{ add $i 1 }}{{ end }}"
+           loading="lazy">
+      {{- with $cap }}
+      <figcaption class="gallery-caption">{{ . }}</figcaption>
+      {{- end }}
+    </figure>
+    {{- end }}
+  </div>
+  {{- else }}
+  <p class="gallery-empty">No photos yet — drop JPGs or PNGs into <code>static/gallery/</code>.</p>
+  {{- end }}
+
+</div>
+
+{{- /* Lightbox overlay */ -}}
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button class="lightbox-close" id="lb-close" aria-label="Close lightbox">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous photo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next photo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <figure class="lightbox-figure" aria-live="polite">
+    <img class="lightbox-img" id="lb-img" src="" alt="">
+    <figcaption class="lightbox-caption" id="lb-caption"></figcaption>
+  </figure>
+</div>
+
+<script>
+(function () {
+  var items   = Array.from(document.querySelectorAll('.gallery-item'));
+  var lb      = document.getElementById('lightbox');
+  var lbImg   = document.getElementById('lb-img');
+  var lbCap   = document.getElementById('lb-caption');
+  var lbClose = document.getElementById('lb-close');
+  var lbPrev  = document.getElementById('lb-prev');
+  var lbNext  = document.getElementById('lb-next');
+  var current = 0;
+  var lastFocused = null;
+
+  if (!items.length) return;
+
+  function show(idx) {
+    current = ((idx % items.length) + items.length) % items.length;
+    var item    = items[current];
+    var src     = item.dataset.src;
+    var caption = item.dataset.caption || '';
+    lbImg.src         = src;
+    lbImg.alt         = caption || item.querySelector('img').alt;
+    lbCap.textContent = caption;
+    lbCap.hidden      = !caption;
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { lbClose.focus(); });
+  }
+
+  function close() {
+    lb.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  items.forEach(function (item, i) {
+    item.addEventListener('click', function () {
+      lastFocused = item;
+      show(i);
+    });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        lastFocused = item;
+        show(i);
+      }
+    });
+  });
+
+  lbClose.addEventListener('click', close);
+  lbPrev.addEventListener('click',  function () { show(current - 1); });
+  lbNext.addEventListener('click',  function () { show(current + 1); });
+
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+})();
+</script>
+{{- end }}
