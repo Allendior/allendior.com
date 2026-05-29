@@ -1,0 +1,21 @@
+# Hand-maintained mood tags for Spotify tracks.
+# This file is NEVER overwritten by the sync script — edit freely.
+#
+# Format:
+#   moods:
+#     "<spotify_track_id>": ["mood1", "mood2"]
+#
+# To find a track's ID: after the first sync, check data/music.yaml.
+# Or on Spotify: right-click any track → Share → Copy Song Link.
+# The ID is the final segment of the URL:
+#   https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT
+#                                    ↑ this is the track_id
+#
+# Suggested moods (feel free to add your own):
+#   lofi · chill · indie · hip-hop · phonk · j-pop · punjabi · bollywood
+#
+# Example:
+#   "4cOdK2wGLETKBW3PvgPWqT": ["lofi", "chill"]
+#   "5Q0Nhxo0l2bP3pNjpGJwV1": ["hip-hop"]
+
+moods: {}

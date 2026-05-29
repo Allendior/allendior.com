@@ -714,19 +714,28 @@ html.lang-hi .hero-rss {
    ════════════════════════════════ */
 
 .music-page {
-  max-width: 740px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
 
+/* ── Header row: title/subtitle left, synced timestamp right ── */
+
 .music-header { margin-bottom: 2rem; }
+
+.music-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
 
 .music-heading {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 400;
   color: var(--heading);
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.35rem;
   letter-spacing: -0.02em;
 }
 
@@ -736,11 +745,23 @@ html.lang-hi .hero-rss {
   margin: 0;
 }
 
+.music-synced {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin: 0;
+  padding-top: 0.55rem;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+/* ── Mood filter chips ── */
+
 .mood-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .mood-chip {
@@ -770,20 +791,7 @@ html.lang-hi .hero-rss {
 
 [data-theme="light"] .mood-chip.active { color: #fff; }
 
-.mood-section { margin-bottom: 2.5rem; }
-.mood-section[hidden] { display: none; }
-
-.mood-section-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  padding-bottom: 0.45rem;
-  margin: 0 0 0.25rem;
-  border-bottom: 1px solid var(--border);
-  font-family: inherit;
-  font-weight: 400;
-}
+/* ── Track list ── */
 
 .tracks-list {
   display: flex;
@@ -791,22 +799,47 @@ html.lang-hi .hero-rss {
 }
 
 .track-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 0.85rem;
   padding: 0.6rem 0;
   border-bottom: 1px solid var(--border);
+  transition: opacity 0.15s;
 }
 
+.track-card[hidden] { display: none; }
+
 .track-card:last-child { border-bottom: none; }
+
+/* ── Album art ── */
+
+.track-art {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.track-art-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Track info (middle column) ── */
 
 .track-info {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.12rem;
   min-width: 0;
-  flex: 1;
 }
 
 .track-title {
@@ -817,19 +850,43 @@ html.lang-hi .hero-rss {
   text-overflow: ellipsis;
 }
 
-.track-artist {
-  color: var(--text-muted);
+.track-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.78rem;
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+.track-artist,
+.track-album {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.track-links {
-  display: flex;
-  gap: 0.45rem;
-  align-items: center;
+.track-album { opacity: 0.75; }
+
+.track-sep {
   flex-shrink: 0;
+  opacity: 0.45;
+}
+
+/* ── Right column: duration + Spotify icon ── */
+
+.track-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.track-duration {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
 .track-link {
@@ -840,14 +897,20 @@ html.lang-hi .hero-rss {
   padding: 0.2rem;
 }
 
-.track-link:hover { color: var(--accent) !important; }
-.track-spotify:hover { color: #1DB954 !important; }
-.track-youtube:hover { color: #FF0000 !important; }
+.track-link:hover         { color: var(--accent) !important; }
+.track-spotify:hover      { color: #1DB954 !important; }
 
 .music-empty {
   color: var(--text-muted);
   font-size: 0.95rem;
   padding: 2rem 0;
+}
+
+@media (max-width: 480px) {
+  .music-header-top { flex-direction: column; gap: 0.25rem; }
+  .music-synced     { padding-top: 0; }
+  .track-album      { display: none; }
+  .track-sep        { display: none; }
 }
 
 /* ════════════════════════════════
