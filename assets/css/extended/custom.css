@@ -698,6 +698,25 @@ html.lang-hi .hero-rss {
   line-height: 1.7;
 }
 
+/* Navbar links must stay compact — Devanagari is visually heavier
+   and some menu items (मेरे बारे में) are much wider than English */
+html.lang-hi .site-menu-link {
+  font-size: 0.68rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding: 0 0.55rem;
+}
+
+html.lang-hi .site-menu-link::after {
+  left: 0.55rem;
+  right: 0.55rem;
+}
+
+html.lang-hi .mobile-nav-link {
+  font-size: 0.88rem;
+  text-transform: none;
+}
+
 /* ════════════════════════════════
    GALLERY PAGE
    ════════════════════════════════ */
