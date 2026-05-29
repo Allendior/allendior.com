@@ -41,14 +41,15 @@ OUT_FILE  = DATA_DIR / "music.yaml"
 def _sanitize_playlist_id(raw: str) -> str:
     """
     Accept any of these formats and return the bare playlist ID:
-      - 37i9dQZF1DXcBWIGoYBM5M                          (already bare)
+      - 37i9dQZF1DXcBWIGoYBM5M                               (bare)
       - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
       - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=xxx
-      - spotify:playlist:37i9dQZF1DXcBWIGoYBM5M           (URI format)
+      - https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M  (API href)
+      - spotify:playlist:37i9dQZF1DXcBWIGoYBM5M               (URI)
     """
     raw = raw.strip()
-    # URL format: extract the path segment after /playlist/
-    m = re.search(r'/playlist/([A-Za-z0-9]+)', raw)
+    # API href OR open.spotify.com URL — matches both /playlist/ and /playlists/
+    m = re.search(r'/playlists?/([A-Za-z0-9]+)', raw)
     if m:
         return m.group(1)
     # URI format: spotify:playlist:<id>
@@ -62,8 +63,14 @@ def _sanitize_playlist_id(raw: str) -> str:
 def _http(url: str, *, headers: dict = None, data: bytes = None) -> tuple[dict, int]:
     req = urllib.request.Request(url, data=data, headers=headers or {})
     with urllib.request.urlopen(req, timeout=20) as resp:
-        status = resp.status
-        body = json.loads(resp.read().decode())
+        status   = resp.status
+        final_url = resp.geturl()   # detects silent redirects
+        body     = json.loads(resp.read().decode())
+    # Log endpoint (safe: masks the playlist ID but shows the path structure)
+    endpoint = final_url.split("spotify.com")[-1].split("?")[0] if "spotify.com" in final_url else final_url
+    print(f"  HTTP {status}  endpoint: {endpoint}")
+    if final_url != url:
+        print(f"  ↳ redirected from: {url.split('spotify.com')[-1].split('?')[0]}")
     return body, status
 
 
