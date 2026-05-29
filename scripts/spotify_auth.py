@@ -39,7 +39,7 @@ import urllib.request
 CLIENT_ID     = os.environ.get("SPOTIFY_CLIENT_ID", "").strip()
 CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET", "").strip()
 REDIRECT_URI  = "https://allendior.com/callback"
-SCOPES        = "playlist-read-private playlist-read-collaborative"
+SCOPES        = "playlist-read-private playlist-read-collaborative playlist-read-public user-read-private"
 
 # ── Token exchange ────────────────────────────────────────────────────────────
 
