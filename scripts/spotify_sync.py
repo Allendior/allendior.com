@@ -110,20 +110,24 @@ def fetch_tracks(playlist_id: str, token: str) -> list:
         print(f"  Page {page_num}: HTTP {status}, total={total}, items={len(items)}, "
               f"keys={response_keys}")
 
-        # Guard: if we got a playlist object instead of a tracks page,
-        # the URL resolved to the playlist endpoint (wrong endpoint).
-        # Extract the canonical ID from the response and retry.
-        if "items" not in page and "tracks" in page:
-            real_id = page.get("id", playlist_id)
-            print(f"  ⚠ Got playlist object, not tracks page. "
-                  f"Retrying with canonical id ...{real_id[-4:]}")
-            url = (f"https://api.spotify.com/v1/playlists/{real_id}/tracks"
-                   f"?limit=100")
-            continue
-
+        # Guard: if there's no 'items' key this is not a tracks-page response.
+        # Spotify may have redirected /tracks to the base playlist endpoint
+        # (returning the playlist object instead). Extract the canonical
+        # playlist ID from the response and retry the correct /tracks URL.
         if "items" not in page:
+            real_id = page.get("id", "")
+            if real_id and page_num == 1:
+                print(f"  ⚠ Got playlist object instead of tracks page "
+                      f"(canonical id: ...{real_id[-4:]}). "
+                      f"Retrying /tracks with that id.")
+                url = (f"https://api.spotify.com/v1/playlists/{real_id}/tracks"
+                       f"?limit=100")
+                # Update so future pages stay consistent
+                playlist_id = real_id
+                page_num = 0   # reset so we don't infinite-loop
+                continue
             print(f"  ✗ Unexpected response — no 'items' key. "
-                  f"Full keys: {response_keys}")
+                  f"Keys: {response_keys}")
             break
 
         for item in items:
