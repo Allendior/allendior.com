@@ -2,147 +2,124 @@
 """
 spotify_sync.py — Sync a Spotify playlist to data/music.yaml
 
-Environment variables required (set as GitHub Actions secrets):
-  SPOTIFY_CLIENT_ID
-  SPOTIFY_CLIENT_SECRET
-  SPOTIFY_PLAYLIST_ID   — bare ID only, e.g. 37i9dQZF1DXcBWIGoYBM5M
-                          (the script strips URLs/URIs automatically)
+Environment variables (set as GitHub Actions secrets):
+  SPOTIFY_CLIENT_ID      — Spotify app client ID
+  SPOTIFY_CLIENT_SECRET  — Spotify app client secret
+  SPOTIFY_PLAYLIST_ID    — bare playlist ID, e.g. 1hQRhlGkwfQD0YuUiKnozx
+  SPOTIFY_REFRESH_TOKEN  — long-lived refresh token (see scripts/spotify_auth.py)
+
+The refresh token flow is used because client credentials cannot access
+playlist tracks (Spotify returns 403 even for public playlists in some
+app configurations). Run scripts/spotify_auth.py once locally to generate
+the refresh token, then store it as a GitHub Actions secret.
 
 Writes:
   data/music.yaml        — track list, overwritten on every successful sync
 
 Never touches:
-  data/music_moods.yaml  — your hand-maintained mood tags
+  data/music_moods.yaml  — hand-maintained mood tags
 
-On any failure the script exits 0 so the Hugo build continues
-using whatever data/music.yaml already exists.
+On any failure the script exits 0 so the Hugo build continues using
+whatever data/music.yaml already exists.
 """
 
 import base64
 import json
 import os
 import re
-import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
+# ── Paths ─────────────────────────────────────────────────────────────────────
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR  = REPO_ROOT / "data"
 OUT_FILE  = DATA_DIR / "music.yaml"
 
+# ── HTTP helper ───────────────────────────────────────────────────────────────
 
-def _sanitize_playlist_id(raw: str) -> str:
-    """
-    Accept any of these formats and return the bare playlist ID:
-      - 37i9dQZF1DXcBWIGoYBM5M                               (bare)
-      - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
-      - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=xxx
-      - https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M  (API href)
-      - spotify:playlist:37i9dQZF1DXcBWIGoYBM5M               (URI)
-    """
-    raw = raw.strip()
-    # API href OR open.spotify.com URL — matches both /playlist/ and /playlists/
-    m = re.search(r'/playlists?/([A-Za-z0-9]+)', raw)
-    if m:
-        return m.group(1)
-    # URI format: spotify:playlist:<id>
-    m = re.search(r'spotify:playlist:([A-Za-z0-9]+)', raw)
-    if m:
-        return m.group(1)
-    # Assume it's already a bare ID
-    return raw
-
-
-def _http(url: str, *, headers: dict = None, data: bytes = None) -> tuple[dict, int]:
+def _http(url: str, *, headers: dict = None, data: bytes = None) -> dict:
     req = urllib.request.Request(url, data=data, headers=headers or {})
     with urllib.request.urlopen(req, timeout=20) as resp:
-        status   = resp.status
-        final_url = resp.geturl()   # detects silent redirects
-        body     = json.loads(resp.read().decode())
-    # Log endpoint (safe: masks the playlist ID but shows the path structure)
-    endpoint = final_url.split("spotify.com")[-1].split("?")[0] if "spotify.com" in final_url else final_url
-    print(f"  HTTP {status}  endpoint: {endpoint}")
-    if final_url != url:
-        print(f"  ↳ redirected from: {url.split('spotify.com')[-1].split('?')[0]}")
-    return body, status
+        return json.loads(resp.read().decode())
 
 
-def get_token(client_id: str, client_secret: str) -> str:
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+def get_token(client_id: str, client_secret: str, refresh_token: str) -> str:
+    """Exchange a refresh token for a fresh access token."""
     creds = base64.b64encode(f"{client_id}:{client_secret}".encode()).decode()
-    resp, status = _http(
+    body  = urllib.parse.urlencode({
+        "grant_type":    "refresh_token",
+        "refresh_token": refresh_token,
+    }).encode()
+    resp = _http(
         "https://accounts.spotify.com/api/token",
-        data=b"grant_type=client_credentials",
+        data=body,
         headers={
             "Authorization": f"Basic {creds}",
             "Content-Type":  "application/x-www-form-urlencoded",
         },
     )
-    print(f"  Token HTTP status: {status}")
     return resp["access_token"]
 
 
+# ── Playlist ID sanitizer ─────────────────────────────────────────────────────
+
+def _sanitize_playlist_id(raw: str) -> str:
+    """
+    Accept any format and return the bare playlist ID:
+      37i9dQZF1DXcBWIGoYBM5M
+      https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=xxx
+      https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M
+      spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+    """
+    raw = raw.strip()
+    m = re.search(r'/playlists?/([A-Za-z0-9]+)', raw)
+    if m:
+        return m.group(1)
+    m = re.search(r'spotify:playlist:([A-Za-z0-9]+)', raw)
+    if m:
+        return m.group(1)
+    return raw
+
+
+# ── Track fetching ────────────────────────────────────────────────────────────
+
 def fetch_tracks(playlist_id: str, token: str) -> list:
     """Fetch all tracks from a playlist, following pagination."""
-    tracks = []
-    base = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-    url  = f"{base}?limit=100"
-    auth = {"Authorization": f"Bearer {token}"}
+    tracks   = []
+    url      = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
+    auth     = {"Authorization": f"Bearer {token}"}
     page_num = 0
 
-    # Log the URL we intend to call (mask all but last 4 chars of the ID)
-    safe_id  = f"...{playlist_id[-4:]}"
-    safe_url = url.replace(playlist_id, safe_id)
-    print(f"  Tracks URL: {safe_url}")
+    print(f"  Tracks URL: https://api.spotify.com/v1/playlists/...{playlist_id[-4:]}/tracks")
 
     while url:
-        page, status = _http(url, headers=auth)
+        page     = _http(url, headers=auth)
         page_num += 1
-        response_keys = list(page.keys())
-        items = page.get("items", [])
-        total = page.get("total", "?")
-        print(f"  Page {page_num}: HTTP {status}, total={total}, items={len(items)}, "
-              f"keys={response_keys}")
+        items    = page.get("items", [])
+        total    = page.get("total", "?")
+        print(f"  Page {page_num}: total={total}, items_on_page={len(items)}")
 
-        # Guard: if there's no 'items' key this is not a tracks-page response.
-        # Spotify may have redirected /tracks to the base playlist endpoint
-        # (returning the playlist object instead). Extract the canonical
-        # playlist ID from the response and retry the correct /tracks URL.
         if "items" not in page:
-            real_id = page.get("id", "")
-            if real_id and page_num == 1:
-                print(f"  ⚠ Got playlist object instead of tracks page "
-                      f"(canonical id: ...{real_id[-4:]}). "
-                      f"Retrying /tracks with that id.")
-                url = (f"https://api.spotify.com/v1/playlists/{real_id}/tracks"
-                       f"?limit=100")
-                # Update so future pages stay consistent
-                playlist_id = real_id
-                page_num = 0   # reset so we don't infinite-loop
-                continue
-            print(f"  ✗ Unexpected response — no 'items' key. "
-                  f"Keys: {response_keys}")
+            print(f"  ✗ Unexpected response — keys: {list(page.keys())}")
             break
 
         for item in items:
             track = item.get("track")
             if not track or not track.get("id"):
-                print(f"    Skipping null/local track (is_local={item.get('is_local')})")
-                continue
+                continue  # skip null / local tracks
 
-            images = track.get("album", {}).get("images", [])
+            images  = track.get("album", {}).get("images", [])
             art_url = next(
                 (img["url"] for img in images
                  if isinstance(img.get("width"), int) and img["width"] <= 300 and img.get("url")),
                 images[-1]["url"] if images else "",
             )
-
             tracks.append({
                 "track_id":      track["id"],
                 "title":         track["name"],
@@ -157,12 +134,9 @@ def fetch_tracks(playlist_id: str, token: str) -> list:
     return tracks
 
 
-# ---------------------------------------------------------------------------
-# YAML serialiser — no external dependencies needed
-# ---------------------------------------------------------------------------
+# ── YAML serialiser ───────────────────────────────────────────────────────────
 
 def _yaml_str(value: str) -> str:
-    """Return a safely quoted YAML scalar for an arbitrary string."""
     if not value:
         return "''"
     must_quote = set(':#{}[],&*?|-<>=!%@\\')
@@ -191,36 +165,37 @@ def dump_music_yaml(synced_at: str, synced_display: str, tracks: list) -> str:
     return "\n".join(lines) + "\n"
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    client_id     = os.environ.get("SPOTIFY_CLIENT_ID", "").strip()
+    client_id     = os.environ.get("SPOTIFY_CLIENT_ID",     "").strip()
     client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET", "").strip()
-    playlist_raw  = os.environ.get("SPOTIFY_PLAYLIST_ID", "").strip()
+    playlist_raw  = os.environ.get("SPOTIFY_PLAYLIST_ID",   "").strip()
+    refresh_token = os.environ.get("SPOTIFY_REFRESH_TOKEN", "").strip()
 
-    # Debug: confirm each credential is present (never print values)
     print(f"  SPOTIFY_CLIENT_ID:     {'SET' if client_id     else 'MISSING'}")
     print(f"  SPOTIFY_CLIENT_SECRET: {'SET' if client_secret else 'MISSING'}")
     print(f"  SPOTIFY_PLAYLIST_ID:   {'SET' if playlist_raw  else 'MISSING'}")
+    print(f"  SPOTIFY_REFRESH_TOKEN: {'SET' if refresh_token else 'MISSING'}")
 
-    if not all([client_id, client_secret, playlist_raw]):
-        print("⚠  Spotify credentials not set — skipping sync, keeping existing music.yaml")
+    if not all([client_id, client_secret, playlist_raw, refresh_token]):
+        print("⚠  One or more Spotify credentials missing — skipping sync.")
+        print("   Run scripts/spotify_auth.py locally to generate SPOTIFY_REFRESH_TOKEN.")
         return
 
     playlist_id = _sanitize_playlist_id(playlist_raw)
-    print(f"  Playlist ID (sanitized, last 4 chars): ...{playlist_id[-4:]}")
+    print(f"  Playlist ID (last 4): ...{playlist_id[-4:]}")
 
     try:
-        print("→ Authenticating with Spotify …")
-        token = get_token(client_id, client_secret)
+        print("→ Getting access token via refresh token …")
+        token = get_token(client_id, client_secret, refresh_token)
+        print("  ✓ Access token obtained")
 
-        print(f"→ Fetching tracks from playlist …")
+        print("→ Fetching tracks …")
         tracks = fetch_tracks(playlist_id, token)
-        print(f"  {len(tracks)} tracks fetched total")
+        print(f"  {len(tracks)} tracks fetched")
 
-        now = datetime.now(timezone.utc)
+        now            = datetime.now(timezone.utc)
         synced_at      = now.strftime("%Y-%m-%dT%H:%M:%SZ")
         synced_display = now.strftime("%d %b %Y, %H:%M UTC")
 
@@ -234,16 +209,16 @@ def main() -> None:
     except urllib.error.HTTPError as exc:
         body = exc.read().decode(errors="replace")
         print(f"✗ Spotify HTTP {exc.code}: {body[:400]}")
-        if exc.code == 403:
-            print("  ↳ 403 Forbidden — the playlist is likely set to Private.")
-            print("    Fix: open Spotify, right-click the playlist → Make public.")
-            print("    Then update SPOTIFY_PLAYLIST_ID in GitHub Secrets to the")
-            print("    bare playlist ID (no URL, no ?si= parameter).")
+        if exc.code == 401:
+            print("  ↳ 401 Unauthorized — refresh token may be expired or revoked.")
+            print("    Re-run scripts/spotify_auth.py and update SPOTIFY_REFRESH_TOKEN.")
+        elif exc.code == 403:
+            print("  ↳ 403 Forbidden — check playlist ID and app permissions.")
         print("  Keeping existing data/music.yaml")
 
     except Exception as exc:
-        print(f"✗ Spotify sync failed: {exc}")
         import traceback
+        print(f"✗ Spotify sync failed: {exc}")
         traceback.print_exc()
         print("  Keeping existing data/music.yaml")
 
