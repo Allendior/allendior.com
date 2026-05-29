@@ -234,6 +234,11 @@ def main() -> None:
     except urllib.error.HTTPError as exc:
         body = exc.read().decode(errors="replace")
         print(f"✗ Spotify HTTP {exc.code}: {body[:400]}")
+        if exc.code == 403:
+            print("  ↳ 403 Forbidden — the playlist is likely set to Private.")
+            print("    Fix: open Spotify, right-click the playlist → Make public.")
+            print("    Then update SPOTIFY_PLAYLIST_ID in GitHub Secrets to the")
+            print("    bare playlist ID (no URL, no ?si= parameter).")
         print("  Keeping existing data/music.yaml")
 
     except Exception as exc:
