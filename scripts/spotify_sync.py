@@ -91,22 +91,40 @@ def get_token(client_id: str, client_secret: str) -> str:
 def fetch_tracks(playlist_id: str, token: str) -> list:
     """Fetch all tracks from a playlist, following pagination."""
     tracks = []
-    # Don't use the fields filter — it can cause Spotify to return an
-    # unexpected response structure. Fetch all fields and select locally.
-    url = (
-        f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-        f"?limit=100"
-    )
+    base = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    url  = f"{base}?limit=100"
     auth = {"Authorization": f"Bearer {token}"}
     page_num = 0
+
+    # Log the URL we intend to call (mask all but last 4 chars of the ID)
+    safe_id  = f"...{playlist_id[-4:]}"
+    safe_url = url.replace(playlist_id, safe_id)
+    print(f"  Tracks URL: {safe_url}")
 
     while url:
         page, status = _http(url, headers=auth)
         page_num += 1
+        response_keys = list(page.keys())
         items = page.get("items", [])
         total = page.get("total", "?")
         print(f"  Page {page_num}: HTTP {status}, total={total}, items={len(items)}, "
-              f"response keys={list(page.keys())}")
+              f"keys={response_keys}")
+
+        # Guard: if we got a playlist object instead of a tracks page,
+        # the URL resolved to the playlist endpoint (wrong endpoint).
+        # Extract the canonical ID from the response and retry.
+        if "items" not in page and "tracks" in page:
+            real_id = page.get("id", playlist_id)
+            print(f"  ⚠ Got playlist object, not tracks page. "
+                  f"Retrying with canonical id ...{real_id[-4:]}")
+            url = (f"https://api.spotify.com/v1/playlists/{real_id}/tracks"
+                   f"?limit=100")
+            continue
+
+        if "items" not in page:
+            print(f"  ✗ Unexpected response — no 'items' key. "
+                  f"Full keys: {response_keys}")
+            break
 
         for item in items:
             track = item.get("track")
@@ -115,7 +133,6 @@ def fetch_tracks(playlist_id: str, token: str) -> list:
                 continue
 
             images = track.get("album", {}).get("images", [])
-            # Prefer ~300 px; fall back to smallest available
             art_url = next(
                 (img["url"] for img in images
                  if isinstance(img.get("width"), int) and img["width"] <= 300 and img.get("url")),
