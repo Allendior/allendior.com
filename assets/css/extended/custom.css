@@ -1028,6 +1028,7 @@ html.lang-hi .mobile-nav-link {
 }
 
 .proj-card {
+  position: relative;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-left: 3px solid transparent;
@@ -1036,7 +1037,7 @@ html.lang-hi .mobile-nav-link {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  text-decoration: none !important;
+  cursor: pointer;
   transition: border-color 0.2s ease, border-left-color 0.2s ease,
               box-shadow 0.2s ease, background-color 0.2s ease;
 }
@@ -1046,6 +1047,18 @@ html.lang-hi .mobile-nav-link {
   border-left-color: var(--accent);
   box-shadow: var(--shadow-sm);
   background-color: var(--bg-elevated);
+}
+
+.proj-card-link {
+  display: block;
+  text-decoration: none !important;
+}
+
+.proj-card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
 }
 
 .proj-title {
@@ -1076,11 +1089,29 @@ html.lang-hi .mobile-nav-link {
   color: var(--text-muted);
 }
 
+.proj-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .proj-tags {
   font-size: 0.73rem;
   color: var(--text-muted);
   letter-spacing: 0.015em;
 }
+
+.proj-live {
+  position: relative;
+  z-index: 1;
+  font-size: 0.73rem;
+  color: var(--accent);
+  text-decoration: none !important;
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease;
+}
+
+.proj-live:hover { color: var(--accent-light); }
 
 /* ── GitHub repos ── */
 .projects-github { margin-top: 1rem; }

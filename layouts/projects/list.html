@@ -10,18 +10,25 @@
   {{- if $pages }}
   <div class="proj-list">
     {{- range $pages }}
-    <a class="proj-card" href="{{ .Permalink }}">
-      <span class="proj-title">{{ .Title }}</span>
+    <div class="proj-card">
+      <a class="proj-card-link" href="{{ .Permalink }}">
+        <span class="proj-title">{{ .Title }}</span>
+      </a>
       {{- with .Params.description }}
       <p class="proj-desc">{{ . }}</p>
       {{- end }}
       <div class="proj-footer">
         <span class="proj-date">{{ .Date.Format "Jan 2006" }}</span>
-        {{- with .Params.tags }}
-        <span class="proj-tags">{{ delimit . " · " }}</span>
-        {{- end }}
+        <div class="proj-footer-right">
+          {{- with .Params.tags }}
+          <span class="proj-tags">{{ delimit . " · " }}</span>
+          {{- end }}
+          {{- with .Params.live }}
+          <a class="proj-live" href="{{ . }}" target="_blank" rel="noopener noreferrer">Live →</a>
+          {{- end }}
+        </div>
       </div>
-    </a>
+    </div>
     {{- end }}
   </div>
   {{- end }}
