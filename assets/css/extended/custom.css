@@ -1109,9 +1109,14 @@ html.lang-hi .mobile-nav-link {
   text-decoration: none !important;
   letter-spacing: 0.01em;
   transition: color 0.2s ease;
+  border: none;
+  outline: none;
 }
 
 .proj-live:hover { color: var(--accent-light); }
+.proj-live:focus-visible { outline: none; }
+
+.proj-card-link::after { outline: none; }
 
 /* ── GitHub repos ── */
 .projects-github { margin-top: 1rem; }
