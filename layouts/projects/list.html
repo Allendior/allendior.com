@@ -3,37 +3,31 @@
 
   <header class="projects-header">
     <h1 class="projects-heading">{{ .Title }}</h1>
+    <p class="projects-subtitle">{{ .Content | plainify }}</p>
   </header>
-
-  <div class="projects-manual post-content">
-    {{ .Content }}
-  </div>
 
   {{- $pages := .Pages.ByDate.Reverse }}
   {{- if $pages }}
-  <section class="projects-github">
-    <h2 class="github-section-heading">Writeups</h2>
-    <div class="github-repos-grid">
-      {{- range $pages }}
-      <a class="github-repo-card" href="{{ .Permalink }}">
-        <div class="repo-header">
-          <span class="repo-name">{{ .Title }}</span>
-          <span class="repo-updated">{{ .Date.Format "Jan 2006" }}</span>
-        </div>
-        {{- with .Params.description }}
-        <p class="repo-desc">{{ . }}</p>
-        {{- end }}
-        {{- with .Params.tags }}
-        <div class="repo-meta">
-          {{- range . }}
-          <span class="repo-lang">{{ . }}</span>
-          {{- end }}
-        </div>
-        {{- end }}
-      </a>
+  <div class="github-repos-grid">
+    {{- range $pages }}
+    <a class="github-repo-card" href="{{ .Permalink }}">
+      <div class="repo-header">
+        <span class="repo-name">{{ .Title }}</span>
+        <span class="repo-updated">{{ .Date.Format "Jan 2006" }}</span>
+      </div>
+      {{- with .Params.description }}
+      <p class="repo-desc">{{ . }}</p>
       {{- end }}
-    </div>
-  </section>
+      {{- with .Params.tags }}
+      <div class="repo-meta">
+        {{- range . }}
+        <span class="repo-lang">{{ . }}</span>
+        {{- end }}
+      </div>
+      {{- end }}
+    </a>
+    {{- end }}
+  </div>
   {{- end }}
 
   {{- $repos := hugo.Data.github_repos }}
