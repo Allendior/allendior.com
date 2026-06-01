@@ -1019,6 +1019,69 @@ html.lang-hi .mobile-nav-link {
   font-style: italic;
 }
 
+/* ── Portfolio project cards ── */
+.proj-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 3rem;
+}
+
+.proj-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  text-decoration: none !important;
+  transition: border-color 0.2s ease, border-left-color 0.2s ease,
+              box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.proj-card:hover {
+  border-color: var(--border-hover);
+  border-left-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--bg-elevated);
+}
+
+.proj-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--heading) !important;
+  transition: color 0.2s ease;
+}
+
+.proj-card:hover .proj-title { color: var(--accent-light) !important; }
+
+.proj-desc {
+  font-size: 0.875rem;
+  color: var(--text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.proj-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+}
+
+.proj-date {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.proj-tags {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  letter-spacing: 0.015em;
+}
+
 /* ── GitHub repos ── */
 .projects-github { margin-top: 1rem; }
 

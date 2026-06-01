@@ -8,23 +8,19 @@
 
   {{- $pages := .Pages.ByDate.Reverse }}
   {{- if $pages }}
-  <div class="github-repos-grid">
+  <div class="proj-list">
     {{- range $pages }}
-    <a class="github-repo-card" href="{{ .Permalink }}">
-      <div class="repo-header">
-        <span class="repo-name">{{ .Title }}</span>
-        <span class="repo-updated">{{ .Date.Format "Jan 2006" }}</span>
-      </div>
+    <a class="proj-card" href="{{ .Permalink }}">
+      <span class="proj-title">{{ .Title }}</span>
       {{- with .Params.description }}
-      <p class="repo-desc">{{ . }}</p>
+      <p class="proj-desc">{{ . }}</p>
       {{- end }}
-      {{- with .Params.tags }}
-      <div class="repo-meta">
-        {{- range . }}
-        <span class="repo-lang">{{ . }}</span>
+      <div class="proj-footer">
+        <span class="proj-date">{{ .Date.Format "Jan 2006" }}</span>
+        {{- with .Params.tags }}
+        <span class="proj-tags">{{ delimit . " · " }}</span>
         {{- end }}
       </div>
-      {{- end }}
     </a>
     {{- end }}
   </div>
