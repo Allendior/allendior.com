@@ -2,7 +2,7 @@
 title: "Weekly Grocery Automation"
 date: 2026-06-01
 draft: false
-tags: ["python", "playwright", "automation", "ai agents", "telegram"]
+tags: ["python", "playwright", "automation", "telegram"]
 description: "An AI agent that automatically builds my Instacart cart every week, logs prices, and notifies me on Telegram — so I never run out of food."
 ---
 
