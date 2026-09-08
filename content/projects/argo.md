@@ -1,6 +1,6 @@
 ---
 title: "Argo"
-date: 2026-09-07
+date: 2026-08-18
 draft: false
 tags: ["android", "automation", "agents", "security"]
 description: "A signed-job control plane for Android actions: typed requests, bounded authority, and no on-device LLM."

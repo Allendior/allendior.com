@@ -1,6 +1,6 @@
 ---
 title: "Almanac"
-date: 2026-09-04
+date: 2026-08-15
 draft: false
 tags: ["android", "privacy", "camerax", "local-first"]
 description: "A local Android time capsule for intentional daily portraits, with explicit export and no network access."

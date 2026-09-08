@@ -1,6 +1,6 @@
 ---
 title: "Map of Exploration"
-date: 2026-09-06
+date: 2026-08-13
 draft: false
 tags: ["android", "kotlin", "privacy", "offline-first"]
 description: "An offline Android place-memory app with Room storage and a portable, versioned archive format."

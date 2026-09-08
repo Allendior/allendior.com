@@ -30,6 +30,13 @@
       "source_evidence": ["projects/kindle-library/README.md"]
     },
     {
+      "id": "apex-private-health-log",
+      "status": "queued",
+      "path": "automation/queued/apex-private-health-log.md",
+      "project": "Apex",
+      "source_evidence": ["execution/apex-relay-setup.md", "execution/apex-apple-health-approved-scope.md"]
+    },
+    {
       "id": "almanac-private-archive",
       "status": "queued",
       "path": "automation/queued/almanac-private-archive.md",

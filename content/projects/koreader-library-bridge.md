@@ -1,6 +1,6 @@
 ---
 title: "KOReader Library Bridge"
-date: 2026-09-05
+date: 2026-09-04
 draft: false
 tags: ["python", "self-hosting", "ebooks", "local-first"]
 description: "A local owned-ebook pipeline with duplicate protection, Calibre organization, and a private OPDS catalog."
