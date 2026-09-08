@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "policy": {
+    "cadence": "every 14 days",
+    "timezone": "America/Vancouver",
+    "author": "Allen Ghanghas / Allendior",
+    "selection_rule": "Only publish entries already written and approved in this queue. Never inspect arbitrary workspace files or use private data as source material."
+  },
+  "items": [
+    {
+      "id": "argo-signed-jobs",
+      "status": "published",
+      "published_at": "2026-09-07T00:00:00-07:00",
+      "path": "content/writing/argo-signed-jobs-not-unlimited-agent.md",
+      "project": "Argo",
+      "source_evidence": ["projects/private-agent/README.md", "public GitHub repository"]
+    },
+    {
+      "id": "map-of-exploration",
+      "status": "queued",
+      "path": "automation/queued/map-of-exploration.md",
+      "project": "Map of Exploration",
+      "source_evidence": ["projects/allens-map-exploration/README.md"]
+    },
+    {
+      "id": "kindle-koreader-bridge",
+      "status": "queued",
+      "path": "automation/queued/kindle-koreader-bridge.md",
+      "project": "Kindle / KOReader private library bridge",
+      "source_evidence": ["projects/kindle-library/README.md"]
+    },
+    {
+      "id": "almanac-private-archive",
+      "status": "queued",
+      "path": "automation/queued/almanac-private-archive.md",
+      "project": "Almanac",
+      "source_evidence": ["projects/almanac/extracted/almanac-android/README.md"]
+    }
+  ]
+}

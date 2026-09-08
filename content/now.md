@@ -5,26 +5,28 @@ url: "/now/"
 summary: "What Allen is working on right now"
 ---
 
-*Last updated: May 2026 — Kelowna, BC*
+*Last updated: September 2026 — Kelowna, BC*
 
 ---
 
 ## Building
 
-**Dior HQ** is my main focus. It's an AI agent platform designed to help people automate the messy, semi-structured work that doesn't fit neatly into existing tools. Still in early stages but it's taking shape.
+I’m turning the personal software I actually use into small, legible engineering projects: private Android tools, local-first knowledge systems, and agent workflows that fail safely instead of merely sounding capable.
 
-## Reading
+The current thread is reliability: permissions, data boundaries, idempotency, verification, and the boring systems work that decides whether an AI workflow can be trusted.
 
-Working through material on agent architectures — how to make AI systems that actually do things reliably, not just generate plausible-sounding text. Lots of papers, lots of experimentation.
+## Publishing
 
-## Life Admin
+I’m maintaining this site as a build log. Every couple of weeks I publish one concrete note from a project I actually worked on: what problem it addresses, the decision I made, and what is still unfinished.
 
-Actively working through the Canadian permanent residency process. It is as paperwork-intensive as everyone says. I'm staying patient.
+## Working toward
 
-## Writing
+A technical role in the Okanagan where I can combine practical AI enablement, software systems, and clear human support. In parallel, I’m building in public as **Allendior**—slowly, honestly, and with receipts.
 
-Trying to write more consistently. This site is part of that — a place to think in public without it needing to be polished or perfect.
+## Learning
+
+Android development, Python automation, local-first product design, and what it takes to make agents useful beyond a demo.
 
 ---
 
-*This is a [/now](https://nownow.com) page. Updated whenever things change.*
+*This is a [/now](https://nownow.com) page. It changes when the work changes.*
