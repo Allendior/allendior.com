@@ -10,9 +10,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
-import shutil
 import subprocess
-import sys
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -35,6 +33,18 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+
+    if not args.dry_run:
+        # Never publish from a stale or locally-edited checkout. A human change takes
+        # priority over cadence; the next run can resume once the worktree is clean.
+        run("git", "fetch", "origin")
+        run("git", "merge", "--ff-only", "origin/main")
+        status = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=ROOT, check=True,
+            text=True, capture_output=True,
+        ).stdout.strip()
+        if status:
+            raise SystemExit("Refusing automated publication: worktree is not clean.")
 
     queue = load_queue()
     item = next((x for x in queue["items"] if x["status"] == "queued"), None)
