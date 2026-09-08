@@ -82,6 +82,10 @@ def main() -> int:
         run("git", "commit", "-m", f"content: publish {item['project']} build note")
         committed = True
         run("git", "push", "origin", "main")
+        # Pages' workflow was manually re-enabled after GitHub inactivity. Trigger
+        # deployment explicitly so the scheduled publisher does not depend on an
+        # implicit push event being delivered.
+        run("gh", "workflow", "run", "deploy.yml", "--repo", "Allendior/allendior.com", "--ref", "main")
     except Exception:
         # Before a commit, restore the queue so a corrected build can retry cleanly.
         # After a commit, retain the exact committed state: a later retry can push it
