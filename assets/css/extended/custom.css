@@ -569,6 +569,24 @@ footer {
 footer a            { color: var(--text-muted) !important; transition: color var(--transition); }
 footer a:hover      { color: var(--accent) !important; }
 
+/* ── Visit counter ── */
+.site-hits {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  vertical-align: middle;
+}
+
+.site-hits-label {
+  color: var(--text-muted);
+}
+
+.site-hits-badge {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar       { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
