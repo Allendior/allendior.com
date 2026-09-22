@@ -13,35 +13,49 @@
       "published_at": "2026-09-07T00:00:00-07:00",
       "path": "content/writing/argo-signed-jobs-not-unlimited-agent.md",
       "project": "Argo",
-      "source_evidence": ["projects/private-agent/README.md", "public GitHub repository"]
+      "source_evidence": [
+        "projects/private-agent/README.md",
+        "public GitHub repository"
+      ]
     },
     {
       "id": "map-of-exploration",
-      "status": "queued",
+      "status": "published",
       "path": "automation/queued/map-of-exploration.md",
       "project": "Map of Exploration",
-      "source_evidence": ["projects/allens-map-exploration/README.md"]
+      "source_evidence": [
+        "projects/allens-map-exploration/README.md"
+      ],
+      "published_at": "2026-09-21T17:19:07-07:00",
+      "published_path": "content/writing/map-of-exploration.md"
     },
     {
       "id": "kindle-koreader-bridge",
       "status": "queued",
       "path": "automation/queued/kindle-koreader-bridge.md",
       "project": "Kindle / KOReader private library bridge",
-      "source_evidence": ["projects/kindle-library/README.md"]
+      "source_evidence": [
+        "projects/kindle-library/README.md"
+      ]
     },
     {
       "id": "apex-private-health-log",
       "status": "queued",
       "path": "automation/queued/apex-private-health-log.md",
       "project": "Apex",
-      "source_evidence": ["execution/apex-relay-setup.md", "execution/apex-apple-health-approved-scope.md"]
+      "source_evidence": [
+        "execution/apex-relay-setup.md",
+        "execution/apex-apple-health-approved-scope.md"
+      ]
     },
     {
       "id": "almanac-private-archive",
       "status": "queued",
       "path": "automation/queued/almanac-private-archive.md",
       "project": "Almanac",
-      "source_evidence": ["projects/almanac/extracted/almanac-android/README.md"]
+      "source_evidence": [
+        "projects/almanac/extracted/almanac-android/README.md"
+      ]
     }
   ]
 }
