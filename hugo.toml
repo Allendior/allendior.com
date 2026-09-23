@@ -1,6 +1,6 @@
 baseURL = "https://allendior.com/"
 locale = "en-us"
-title = "Allen Ghanghas"
+title = "Allen Dior"
 theme = "PaperMod"
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
@@ -27,9 +27,9 @@ buildExpired = false
 
 [params]
   env = "production"
-  title = "Allen Ghanghas"
-  description = "Building AI agents, writing about tech and life, living in Kelowna BC."
-  author = "Allen Ghanghas"
+  title = "Allen Dior"
+  description = "Allen Dior (legal name Allen Ghanghas) — AI agent builder and full-stack developer in Kelowna, BC. Creator of Hermes. Founder of Beaver Computing. Writing about tech, life, and building things that work."
+  author = "Allen Dior"
   defaultTheme = "dark"
   disableThemeToggle = false
   ShowReadingTime = true
@@ -52,8 +52,8 @@ buildExpired = false
     text = "Allen"
 
   [params.homeInfoParams]
-    Title = "Allen Ghanghas"
-    Content = "Building AI agents and writing about tech, life, and what it means to grow roots in a new place. Based in Kelowna, BC."
+    Title = "Allen Dior"
+    Content = "Building AI agents and writing about tech, life, and what it means to grow roots in a new place. Based in Kelowna, BC. (Legal name: Allen Ghanghas.)"
 
   [[params.socialIcons]]
     name = "github"
@@ -61,11 +61,19 @@ buildExpired = false
 
   [[params.socialIcons]]
     name = "linkedin"
-    url = "https://linkedin.com/in/allenghanghas"
+    url = "https://www.linkedin.com/in/allen-dior-724679274"
 
   [[params.socialIcons]]
     name = "rss"
     url = "/index.xml"
+
+  [params.schema]
+    publisherType = "Person"
+    sameAs = [
+      "https://www.linkedin.com/in/allen-dior-724679274",
+      "https://github.com/Allendior",
+      "https://www.linkedin.com/company/crowdbust",
+    ]
 
 [taxonomies]
   category = "categories"

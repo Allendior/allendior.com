@@ -1,0 +1,40 @@
+User-agent: *
+Allow: /
+
+# Explicit allow for AI/LLM crawlers and answer-engine bots — this site
+# wants to be findable and quotable by AI assistants (ChatGPT, Gemini,
+# Perplexity, Claude), not just classic search.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://allendior.com/sitemap.xml
