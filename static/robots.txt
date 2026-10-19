@@ -1,6 +1,12 @@
 User-agent: *
 Allow: /
 
+# Prefer plain links in Meta chats instead of generated link previews.
+# This requests no preview crawling; existing app caches are separate.
+User-agent: facebookexternalhit
+User-agent: Facebot
+Disallow: /
+
 # Explicit allow for AI/LLM crawlers and answer-engine bots — this site
 # wants to be findable and quotable by AI assistants (ChatGPT, Gemini,
 # Perplexity, Claude), not just classic search.
