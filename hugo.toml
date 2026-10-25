@@ -105,6 +105,11 @@ buildExpired = false
     name = "Gallery"
     url = "/gallery/"
     weight = 50
+  [[menu.main]]
+    identifier = "privacy"
+    name = "Privacy"
+    url = "/privacy/"
+    weight = 90
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

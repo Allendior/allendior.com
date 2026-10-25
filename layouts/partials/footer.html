@@ -9,6 +9,9 @@
         {{- print " · "}}
     {{- end }}
 
+    <span><a href="{{ "/privacy/" | absLangURL }}">Privacy</a></span>
+    {{- print " · "}}
+
     {{- with site.Params.footer.text }}
         {{ . | markdownify }}
         {{- print " · "}}
