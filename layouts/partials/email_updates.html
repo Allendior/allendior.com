@@ -5,7 +5,7 @@
 */}}
 <section class="email-updates" aria-label="Email updates">
   <h2 class="email-updates-title" data-i18n="email_title">Get updates by email</h2>
-  <p class="email-updates-sub" data-i18n="email_sub">Occasional notes when I publish something worth reading. No spam.</p>
+  <p class="email-updates-sub" data-i18n="email_sub">Leave your email if you want occasional notes. I will confirm before any list mail.</p>
   <form class="email-updates-form" id="ag-email-updates-form" novalidate>
     <label class="sr-only" for="ag-email-updates-input">Email</label>
     <input
@@ -46,12 +46,13 @@
   var form = document.getElementById('ag-email-updates-form');
   if (!form || form.dataset.bound === '1') return;
   form.dataset.bound = '1';
+  form.dataset.startedAt = String(Date.now());
   var statusEl = document.getElementById('ag-email-updates-status');
   var endpoint = 'https://dhanana.in/api/subscribe';
   var msgs = {
-    en: { ok: 'You are in. I will write when there is something real to share.', err: 'Could not subscribe right now. Email allendior.ca@gmail.com or try again.', sending: 'Sending…', need: 'Please enter a valid email.' },
-    fr: { ok: 'C’est noté. J’écrirai quand il y aura quelque chose de réel à partager.', err: 'Inscription impossible pour le moment. Écrivez à allendior.ca@gmail.com.', sending: 'Envoi…', need: 'Entrez une adresse courriel valide.' },
-    hi: { ok: 'हो गया। जब सच में कुछ साझा करने लायक होगा, लिखूँगा।', err: 'अभी सब्सक्राइब नहीं हो पाया। allendior.ca@gmail.com पर मेल करें।', sending: 'भेज रहा हूँ…', need: 'कृपया सही ईमेल लिखें।' }
+    en: { ok: 'Got it. I will only write after I confirm — not an automatic mailing list.', err: 'Could not subscribe right now. Email allendior.ca@gmail.com or try again.', sending: 'Sending…', need: 'Please enter a valid email.' },
+    fr: { ok: 'C’est noté. J’écrirai seulement après confirmation — pas une liste automatique.', err: 'Inscription impossible pour le moment. Écrivez à allendior.ca@gmail.com.', sending: 'Envoi…', need: 'Entrez une adresse courriel valide.' },
+    hi: { ok: 'मिल गया। सूची में डालने से पहले पुष्टि करूँगा — अपने-आप मेल नहीं।', err: 'अभी सब्सक्राइब नहीं हो पाया। allendior.ca@gmail.com पर मेल करें।', sending: 'भेज रहा हूँ…', need: 'कृपया सही ईमेल लिखें।' }
   };
   function lang() {
     var l = (document.documentElement.lang || localStorage.getItem('ag_lang') || 'en').split('-')[0];
@@ -82,7 +83,8 @@
       body: JSON.stringify({
         email: email,
         source: 'allendior',
-        website: hp ? hp.value : ''
+        website: hp ? hp.value : '',
+        form_started_at: form.dataset.startedAt || Date.now()
       })
     }).then(function (res) {
       return res.json().then(function (data) {
