@@ -13,7 +13,7 @@ These tools are built and operated by **Allen Dior** (legal name Allen Ghanghas)
 
 ## Email updates on this website
 
-If you use the **Get updates by email** form on allendior.com, your email address is sent over HTTPS to a private form endpoint operated for Allen Dior (`dhanana.in/api/subscribe`, source `allendior`) so Allen can be notified of the signup. This is a **notify-only** capture until a dedicated mailing list provider is connected.
+If you use the **Get updates by email** form on allendior.com, your email address is sent over HTTPS to a private form endpoint on `dhanana.in` so Allen can be notified of the signup. Production currently uses a temporary bridge through the existing Resend-backed form path while a dedicated subscribe route waits on a Vercel redeploy. This is **notify-only** (not a full mailing list with automatic broadcasts yet); submissions are labeled as allendior.com updates and are not Memory Wall posts.
 
 - Used only to send occasional writing/project updates you asked for, or to migrate you onto a proper list later
 - Not sold, not used for ads
