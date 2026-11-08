@@ -1,12 +1,15 @@
 {{/*
-  Email updates capture.
-  Posts to dhanana.in/api/subscribe (existing Resend path) with source=allendior.
-  Notify-only list until a dedicated ESP is connected.
+  Email updates capture (live bridge).
+  dhanana /api/subscribe is in git but production Vercel has not redeployed yet (404).
+  Temporary path: multipart POST to live /api/submit-memory (Resend works).
+  Browser CORS: no Access-Control-Allow-Origin on old deploy → use FormData + mode no-cors,
+  plus hidden-iframe classic form fallback if fetch fails to fire.
+  Notify-only: Allen gets an email; not a durable mailing list / double opt-in yet.
 */}}
 <section class="email-updates" aria-label="Email updates">
   <h2 class="email-updates-title" data-i18n="email_title">Get updates by email</h2>
   <p class="email-updates-sub" data-i18n="email_sub">Leave your email if you want occasional notes. I will confirm before any list mail.</p>
-  <form class="email-updates-form" id="ag-email-updates-form" novalidate>
+  <form class="email-updates-form" id="ag-email-updates-form" method="post" enctype="multipart/form-data" action="https://dhanana.in/api/submit-memory" target="ag-email-bridge-frame" novalidate>
     <label class="sr-only" for="ag-email-updates-input">Email</label>
     <input
       class="email-updates-input"
@@ -19,7 +22,7 @@
       placeholder="you@email.com"
       data-i18n-placeholder="email_ph"
     />
-    {{/* honeypot */}}
+    {{/* honeypot — must stay empty */}}
     <input
       type="text"
       name="website"
@@ -30,9 +33,14 @@
       aria-hidden="true"
       style="position:absolute;left:-10000px;opacity:0;height:0;width:0"
     />
-    <input type="hidden" name="source" value="allendior" />
+    <input type="hidden" name="name" id="ag-email-bridge-name" value="Allendior email update request" />
+    <input type="hidden" name="connection" value="allendior.com email updates" />
+    <input type="hidden" name="era" value="updates" />
+    <input type="hidden" name="anonymous" value="true" />
+    <input type="hidden" name="memory" id="ag-email-bridge-memory" value="" />
     <button class="email-updates-btn" type="submit" data-i18n="email_btn">Subscribe</button>
   </form>
+  <iframe name="ag-email-bridge-frame" id="ag-email-bridge-frame" title="email bridge" style="position:absolute;width:0;height:0;border:0;visibility:hidden" tabindex="-1" aria-hidden="true"></iframe>
   <p class="email-updates-status" id="ag-email-updates-status" role="status" aria-live="polite"></p>
   <p class="email-updates-note">
     <span data-i18n="email_note">Also available via</span>
@@ -48,11 +56,11 @@
   form.dataset.bound = '1';
   form.dataset.startedAt = String(Date.now());
   var statusEl = document.getElementById('ag-email-updates-status');
-  var endpoint = 'https://dhanana.in/api/subscribe';
+  var endpoint = 'https://dhanana.in/api/submit-memory';
   var msgs = {
-    en: { ok: 'Got it. I will only write after I confirm — not an automatic mailing list.', err: 'Could not subscribe right now. Email allendior.ca@gmail.com or try again.', sending: 'Sending…', need: 'Please enter a valid email.' },
-    fr: { ok: 'C’est noté. J’écrirai seulement après confirmation — pas une liste automatique.', err: 'Inscription impossible pour le moment. Écrivez à allendior.ca@gmail.com.', sending: 'Envoi…', need: 'Entrez une adresse courriel valide.' },
-    hi: { ok: 'मिल गया। सूची में डालने से पहले पुष्टि करूँगा — अपने-आप मेल नहीं।', err: 'अभी सब्सक्राइब नहीं हो पाया। allendior.ca@gmail.com पर मेल करें।', sending: 'भेज रहा हूँ…', need: 'कृपया सही ईमेल लिखें।' }
+    en: { ok: 'Got it. I will only write after I confirm — not an automatic mailing list.', err: 'Could not subscribe right now. Email allendior.ca@gmail.com or try again.', sending: 'Sending…', need: 'Please enter a valid email.', bot: 'Thanks.' },
+    fr: { ok: 'C’est noté. J’écrirai seulement après confirmation — pas une liste automatique.', err: 'Inscription impossible pour le moment. Écrivez à allendior.ca@gmail.com.', sending: 'Envoi…', need: 'Entrez une adresse courriel valide.', bot: 'Merci.' },
+    hi: { ok: 'मिल गया। सूची में डालने से पहले पुष्टि करूँगा — अपने-आप मेल नहीं।', err: 'अभी सब्सक्राइब नहीं हो पाया। allendior.ca@gmail.com पर मेल करें।', sending: 'भेज रहा हूँ…', need: 'कृपया सही ईमेल लिखें।', bot: 'धन्यवाद।' }
   };
   function lang() {
     var l = (document.documentElement.lang || localStorage.getItem('ag_lang') || 'en').split('-')[0];
@@ -64,10 +72,23 @@
     statusEl.classList.remove('is-ok', 'is-err');
     if (kind) statusEl.classList.add(kind);
   }
+  function buildMemory(email) {
+    return [
+      'ALLENDIOR_EMAIL_UPDATE request (not a village memory).',
+      'Please treat as a newsletter / updates capture.',
+      'Email: ' + email,
+      'Source: allendior.com',
+      'Captured via temporary live bridge to /api/submit-memory because /api/subscribe is not on production yet.',
+      'Do not auto-publish on the Memory Wall.',
+      'Timestamp: ' + new Date().toISOString()
+    ].join(' ');
+  }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var emailInput = form.querySelector('input[name="email"]');
     var hp = form.querySelector('input[name="website"]');
+    var mem = document.getElementById('ag-email-bridge-memory');
+    var nameField = document.getElementById('ag-email-bridge-name');
     var btn = form.querySelector('button[type="submit"]');
     var email = (emailInput && emailInput.value || '').trim();
     var t = msgs[lang()];
@@ -75,32 +96,89 @@
       setStatus(t.need, 'is-err');
       return;
     }
+    if (hp && hp.value) {
+      setStatus(t.bot, 'is-ok');
+      form.reset();
+      return;
+    }
+    if (mem) mem.value = buildMemory(email);
+    if (nameField) nameField.value = 'Allendior updates: ' + email;
     if (btn) btn.disabled = true;
     setStatus(t.sending, null);
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        source: 'allendior',
-        website: hp ? hp.value : '',
-        form_started_at: form.dataset.startedAt || Date.now()
-      })
-    }).then(function (res) {
-      return res.json().then(function (data) {
-        return { ok: res.ok, data: data };
-      }).catch(function () {
-        return { ok: res.ok, data: {} };
-      });
-    }).then(function (result) {
-      if (!result.ok) throw new Error((result.data && result.data.error) || 'fail');
+
+    var fd = new FormData();
+    fd.append('name', 'Allendior updates: ' + email);
+    fd.append('connection', 'allendior.com email updates');
+    fd.append('era', 'updates');
+    fd.append('memory', buildMemory(email));
+    fd.append('email', email);
+    fd.append('anonymous', 'true');
+    fd.append('website', '');
+
+    var done = false;
+    function succeed() {
+      if (done) return;
+      done = true;
       setStatus(t.ok, 'is-ok');
       form.reset();
-    }).catch(function () {
-      setStatus(t.err, 'is-err');
-    }).finally(function () {
       if (btn) btn.disabled = false;
-    });
+    }
+    function fail() {
+      if (done) return;
+      done = true;
+      setStatus(t.err, 'is-err');
+      if (btn) btn.disabled = false;
+    }
+
+    // Primary: no-cors FormData so the request leaves the browser even without ACAO.
+    // Opaque response → we cannot read JSON; iframe onload is the receipt signal.
+    var iframe = document.getElementById('ag-email-bridge-frame');
+    var iframeTimer = setTimeout(function () {
+      // If neither fetch nor iframe reports, still fail closed after timeout.
+      if (!done) fail();
+    }, 12000);
+
+    if (iframe) {
+      iframe.onload = function () {
+        clearTimeout(iframeTimer);
+        succeed();
+      };
+    }
+
+    var usedFetch = false;
+    try {
+      usedFetch = true;
+      fetch(endpoint, { method: 'POST', body: fd, mode: 'no-cors', credentials: 'omit' })
+        .then(function () {
+          // Opaque: fire classic form into hidden iframe as belt-and-suspenders only if needed.
+          // Prefer single send: mark optimistic success after short delay if iframe didn't load.
+          setTimeout(function () {
+            if (!done) {
+              clearTimeout(iframeTimer);
+              succeed();
+            }
+          }, 1500);
+        })
+        .catch(function () {
+          // Fallback: native form POST into hidden iframe (also bypasses CORS).
+          try {
+            form.submit();
+          } catch (err) {
+            clearTimeout(iframeTimer);
+            fail();
+          }
+        });
+    } catch (err) {
+      usedFetch = false;
+    }
+    if (!usedFetch) {
+      try {
+        form.submit();
+      } catch (err2) {
+        clearTimeout(iframeTimer);
+        fail();
+      }
+    }
   });
 })();
 </script>
