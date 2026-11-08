@@ -11,6 +11,15 @@ This page covers **allendior.com** and Allen Dior’s private personal software 
 
 These tools are built and operated by **Allen Dior** (legal name Allen Ghanghas) for personal use. They are not a public multi-tenant product.
 
+## Email updates on this website
+
+If you use the **Get updates by email** form on allendior.com, your email address is sent over HTTPS to a private form endpoint operated for Allen Dior (`dhanana.in/api/subscribe`, source `allendior`) so Allen can be notified of the signup. This is a **notify-only** capture until a dedicated mailing list provider is connected.
+
+- Used only to send occasional writing/project updates you asked for, or to migrate you onto a proper list later
+- Not sold, not used for ads
+- You can ask removal anytime: **allendior.ca@gmail.com**
+- RSS remains available without giving an email: `/index.xml`
+
 ## What data is accessed
 
 When you authorize Google access for a personal tool on this brand, the tool may access only the Google scopes you approve — commonly:
@@ -46,4 +55,4 @@ Local caches, logs, and OAuth tokens are kept only as long as needed for the too
 
 Questions about this policy: **allendior.ca@gmail.com**
 
-Last updated: 2026-10-24
+Last updated: 2026-11-08
