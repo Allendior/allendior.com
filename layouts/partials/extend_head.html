@@ -25,6 +25,12 @@ var AG_i18n = {
     wr_heading:  'Writing',
     wr_subtitle: 'Essays, tutorials, notes, and reflections on tech, life, and Kelowna.',
     wr_rss:      'Never miss a post — subscribe via RSS',
+    email_title: 'Get updates by email',
+    email_sub:   'Occasional notes when I publish something worth reading. No spam.',
+    email_btn:   'Subscribe',
+    email_ph:    'you@email.com',
+    email_note:  'Also available via',
+    email_rss:   'RSS',
     cat_all:     'All',
     cat_tech:    'Tech',
     cat_life:    'Life',
@@ -42,6 +48,12 @@ var AG_i18n = {
     wr_heading:  'Écriture',
     wr_subtitle: 'Essais, tutoriels, notes et réflexions sur la tech, la vie et Kelowna.',
     wr_rss:      'Ne manquez rien — abonnez-vous via RSS',
+    email_title: 'Recevoir des nouvelles par courriel',
+    email_sub:   'Des notes occasionnelles quand je publie quelque chose qui en vaut la peine. Pas de spam.',
+    email_btn:   "S'abonner",
+    email_ph:    'vous@email.com',
+    email_note:  'Aussi disponible via',
+    email_rss:   'RSS',
     cat_all:     'Tous',
     cat_tech:    'Tech',
     cat_life:    'Vie',
@@ -59,6 +71,12 @@ var AG_i18n = {
     wr_heading:  'लेखन',
     wr_subtitle: 'तकनीक, जीवन और केलोना पर निबंध, ट्यूटोरियल और विचार।',
     wr_rss:      'कोई पोस्ट न छूटे — RSS से जुड़ें',
+    email_title: 'ईमेल से अपडेट लें',
+    email_sub:   'जब सच में पढ़ने लायक कुछ छपे, कभी-कभी नोट। स्पैम नहीं।',
+    email_btn:   'सब्सक्राइब',
+    email_ph:    'you@email.com',
+    email_note:  'RSS भी उपलब्ध:',
+    email_rss:   'RSS',
     cat_all:     'सभी',
     cat_tech:    'तकनीक',
     cat_life:    'जीवन',
@@ -73,6 +91,11 @@ function AG_applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(function (el) {
     var key = el.getAttribute('data-i18n');
     if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.setAttribute('placeholder', t[key]);
   });
 
   /* toggle Devanagari font class */

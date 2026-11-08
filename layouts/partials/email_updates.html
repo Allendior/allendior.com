@@ -1,0 +1,106 @@
+{{/*
+  Email updates capture.
+  Posts to dhanana.in/api/subscribe (existing Resend path) with source=allendior.
+  Notify-only list until a dedicated ESP is connected.
+*/}}
+<section class="email-updates" aria-label="Email updates">
+  <h2 class="email-updates-title" data-i18n="email_title">Get updates by email</h2>
+  <p class="email-updates-sub" data-i18n="email_sub">Leave your email if you want occasional notes. I will confirm before any list mail.</p>
+  <form class="email-updates-form" id="ag-email-updates-form" novalidate>
+    <label class="sr-only" for="ag-email-updates-input">Email</label>
+    <input
+      class="email-updates-input"
+      id="ag-email-updates-input"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      maxlength="254"
+      placeholder="you@email.com"
+      data-i18n-placeholder="email_ph"
+    />
+    {{/* honeypot */}}
+    <input
+      type="text"
+      name="website"
+      id="ag-email-updates-hp"
+      value=""
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      style="position:absolute;left:-10000px;opacity:0;height:0;width:0"
+    />
+    <input type="hidden" name="source" value="allendior" />
+    <button class="email-updates-btn" type="submit" data-i18n="email_btn">Subscribe</button>
+  </form>
+  <p class="email-updates-status" id="ag-email-updates-status" role="status" aria-live="polite"></p>
+  <p class="email-updates-note">
+    <span data-i18n="email_note">Also available via</span>
+    <a href="{{ "/index.xml" | absLangURL }}" data-i18n="email_rss">RSS</a>.
+    <a href="{{ "/privacy/" | absLangURL }}">Privacy</a>.
+  </p>
+</section>
+
+<script>
+(function () {
+  var form = document.getElementById('ag-email-updates-form');
+  if (!form || form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+  form.dataset.startedAt = String(Date.now());
+  var statusEl = document.getElementById('ag-email-updates-status');
+  var endpoint = 'https://dhanana.in/api/subscribe';
+  var msgs = {
+    en: { ok: 'Got it. I will only write after I confirm — not an automatic mailing list.', err: 'Could not subscribe right now. Email allendior.ca@gmail.com or try again.', sending: 'Sending…', need: 'Please enter a valid email.' },
+    fr: { ok: 'C’est noté. J’écrirai seulement après confirmation — pas une liste automatique.', err: 'Inscription impossible pour le moment. Écrivez à allendior.ca@gmail.com.', sending: 'Envoi…', need: 'Entrez une adresse courriel valide.' },
+    hi: { ok: 'मिल गया। सूची में डालने से पहले पुष्टि करूँगा — अपने-आप मेल नहीं।', err: 'अभी सब्सक्राइब नहीं हो पाया। allendior.ca@gmail.com पर मेल करें।', sending: 'भेज रहा हूँ…', need: 'कृपया सही ईमेल लिखें।' }
+  };
+  function lang() {
+    var l = (document.documentElement.lang || localStorage.getItem('ag_lang') || 'en').split('-')[0];
+    return msgs[l] ? l : 'en';
+  }
+  function setStatus(text, kind) {
+    if (!statusEl) return;
+    statusEl.textContent = text || '';
+    statusEl.classList.remove('is-ok', 'is-err');
+    if (kind) statusEl.classList.add(kind);
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var emailInput = form.querySelector('input[name="email"]');
+    var hp = form.querySelector('input[name="website"]');
+    var btn = form.querySelector('button[type="submit"]');
+    var email = (emailInput && emailInput.value || '').trim();
+    var t = msgs[lang()];
+    if (!email || email.indexOf('@') < 1) {
+      setStatus(t.need, 'is-err');
+      return;
+    }
+    if (btn) btn.disabled = true;
+    setStatus(t.sending, null);
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        source: 'allendior',
+        website: hp ? hp.value : '',
+        form_started_at: form.dataset.startedAt || Date.now()
+      })
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        return { ok: res.ok, data: data };
+      }).catch(function () {
+        return { ok: res.ok, data: {} };
+      });
+    }).then(function (result) {
+      if (!result.ok) throw new Error((result.data && result.data.error) || 'fail');
+      setStatus(t.ok, 'is-ok');
+      form.reset();
+    }).catch(function () {
+      setStatus(t.err, 'is-err');
+    }).finally(function () {
+      if (btn) btn.disabled = false;
+    });
+  });
+})();
+</script>
